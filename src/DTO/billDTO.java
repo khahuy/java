@@ -8,7 +8,6 @@ public class billDTO {
     private int maKH;
     private int tongtien;
     private LocalDate ngaymua;
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     public int getmaHD() { return maHD; }
     public void setmaHD(int maHD) { this.maHD = maHD; }

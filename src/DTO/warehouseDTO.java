@@ -7,7 +7,6 @@ public class warehouseDTO {
     private int maSP;
     private String tenSP;
     private LocalDate ngaynhapkho;
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private int soluong;
 
     public int getmaSP(){ return maSP;}

@@ -6,9 +6,8 @@ public class productDTO {
     private String tenSP;
     private String loaiSP;
     private String theloai;
-    private String giaca;
+    private int giaca;
     private LocalDate ngayxuatban;
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     public int getmaSP(){ return maSP;}
     public void setmaSP(int maSP){ this.maSP = maSP;}
@@ -18,8 +17,9 @@ public class productDTO {
     public void setloaiSP(String loaiSP){ this.loaiSP = loaiSP;}
     public String gettheloai(){ return theloai;}
     public void settheloai(String theloai){ this.theloai = theloai;}
-    public String getgiaca(){ return giaca;}
-    public void setgiaca(String giaca){ this.giaca = giaca;}
+    public int getgiaca(){ return giaca;}
+    public void setgiaca(int giaca){ this.giaca = giaca;}
     public LocalDate getngayxuatban(){ return ngayxuatban;}
     public void setngayxuatban(LocalDate ngayxuatban){ this.ngayxuatban = ngayxuatban;}
+
 }
