@@ -1,20 +1,16 @@
-﻿USE javaDB;
+﻿CREATE DATABASE javaDB;
+GO
+USE javaDB;
 GO
 
-CREATE TABLE warehouse (
-    maSP INT IDENTITY(1,1) PRIMARY KEY,
-    tenSP NVARCHAR(150),
-    ngaynhap DATE DEFAULT GETDATE(),
-    soluong INT
-);
 CREATE TABLE products (
-    maSP INT PRIMARY KEY,
+    maSP INT IDENTITY(1,1) PRIMARY KEY,
     tenSP NVARCHAR(150),
     loaiSP NVARCHAR(150),
     theloai NVARCHAR(150),
     giaca INT,
     ngayxuatban DATE,
-    FOREIGN KEY (maSP) REFERENCES warehouse(maSP)
+    ngaynhapkho DATE DEFAULT GETDATE(),
 );
 CREATE TABLE customers (
     maKH INT IDENTITY(1,1) PRIMARY KEY,
@@ -41,50 +37,28 @@ CREATE TABLE bill_details (
     FOREIGN KEY (maHD) REFERENCES bills(maHD),
     FOREIGN KEY (maSP) REFERENCES products(maSP)
 );
-
-INSERT INTO warehouse (tenSP, ngaynhap, soluong) VALUES
-(N'Sách 1', '2022-12-26', 72),
-(N'Sách 2', '2024-04-10', 77),
-(N'Sách 3', '2024-06-13', 19),
-(N'Sách 4', '2022-12-29', 95),
-(N'Sách 5', '2023-05-30', 44),
-(N'Sách 6', '2023-05-28', 99),
-(N'Sách 7', '2023-10-13', 66),
-(N'Sách 8', '2022-07-15', 89),
-(N'Sách 9', '2022-05-21', 23),
-(N'Sách 10', '2022-04-10', 23),
-(N'Sách 11', '2023-03-08', 27),
-(N'Sách 12', '2022-10-22', 76),
-(N'Sách 13', '2023-02-13', 76),
-(N'Sách 14', '2023-01-27', 95),
-(N'Sách 15', '2022-12-16', 48),
-(N'Sách 16', '2022-08-23', 44),
-(N'Sách 17', '2023-11-25', 37),
-(N'Sách 18', '2023-03-08', 31),
-(N'Sách 19', '2023-11-24', 37),
-(N'Sách 20', '2022-12-02', 59);
-
-INSERT INTO products (maSP, tenSP, loaiSP, theloai, giaca, ngayxuatban) VALUES
-(1, N'Sách 1', N'Kỹ năng', N'Văn', 173310, '2022-10-13'),
-(2, N'Sách 2', N'Tiểu thuyết', N'Lịch sử', 239825, '2022-04-04'),
-(3, N'Sách 3', N'Kỹ năng', N'Kinh doanh', 264237, '2023-05-02'),
-(4, N'Sách 4', N'Tham khảo', N'Văn', 156479, '2022-07-15'),
-(5, N'Sách 5', N'Kỹ năng', N'Văn', 162304, '2023-08-01'),
-(6, N'Sách 6', N'Kỹ năng', N'Văn', 233170, '2023-09-13'),
-(7, N'Sách 7', N'Giáo khoa', N'Lý', 269958, '2023-03-21'),
-(8, N'Sách 8', N'Tham khảo', N'Văn', 203557, '2023-04-11'),
-(9, N'Sách 9', N'Kỹ năng', N'Lịch sử', 170400, '2022-04-09'),
-(10, N'Sách 10', N'Kỹ năng', N'Kinh doanh', 130984, '2022-07-06'),
-(11, N'Sách 11', N'Tiểu thuyết', N'Toán', 276300, '2023-03-20'),
-(12, N'Sách 12', N'Tham khảo', N'Văn', 166093, '2022-08-06'),
-(13, N'Sách 13', N'Giáo khoa', N'Lý', 248037, '2023-04-14'),
-(14, N'Sách 14', N'Giáo khoa', N'Toán', 78135, '2023-04-08'),
-(15, N'Sách 15', N'Tiểu thuyết', N'Lịch sử', 253702, '2023-09-21'),
-(16, N'Sách 16', N'Tham khảo', N'Văn', 227631, '2023-11-03'),
-(17, N'Sách 17', N'Kỹ năng', N'Kinh doanh', 201674, '2024-01-17'),
-(18, N'Sách 18', N'Tiểu thuyết', N'Văn', 265300, '2022-04-04'),
-(19, N'Sách 19', N'Kỹ năng', N'Kinh doanh', 245361, '2022-05-21'),
-(20, N'Sách 20', N'Giáo khoa', N'Kinh doanh', 207060, '2023-12-15');
+SET IDENTITY_INSERT products ON;
+INSERT INTO products (maSP, tenSP, loaiSP, theloai, giaca, ngayxuatban, ngaynhapkho) VALUES
+(1, N'Sách 1', N'Kỹ năng', N'Văn', 173310, '2022-10-13', '2022-12-26'),
+(2, N'Sách 2', N'Tiểu thuyết', N'Lịch sử', 239825, '2022-04-04', '2024-04-10'),
+(3, N'Sách 3', N'Kỹ năng', N'Kinh doanh', 264237, '2023-05-02', '2024-06-13'),
+(4, N'Sách 4', N'Tham khảo', N'Văn', 156479, '2022-07-15', '2022-12-29'),
+(5, N'Sách 5', N'Kỹ năng', N'Văn', 162304, '2023-08-01', '2024-05-30'),
+(6, N'Sách 6', N'Kỹ năng', N'Văn', 233170, '2023-09-13', '2024-05-28'),
+(7, N'Sách 7', N'Giáo khoa', N'Lý', 269958, '2023-03-21', '2023-10-13'),
+(8, N'Sách 8', N'Tham khảo', N'Văn', 203557, '2023-04-11', '2024-07-15'),
+(9, N'Sách 9', N'Kỹ năng', N'Lịch sử', 170400, '2022-04-09', '2022-05-21'),
+(10, N'Sách 10', N'Kỹ năng', N'Kinh doanh', 130984, '2022-07-06', '2023-04-10'),
+(11, N'Sách 11', N'Tiểu thuyết', N'Toán', 276300, '2023-03-20', '2023-04-08'),
+(12, N'Sách 12', N'Tham khảo', N'Văn', 166093, '2022-08-06', '2022-10-22'),
+(13, N'Sách 13', N'Giáo khoa', N'Lý', 248037, '2023-04-14', '2023-09-13'),
+(14, N'Sách 14', N'Giáo khoa', N'Toán', 78135, '2023-04-08', '2023-10-27'),
+(15, N'Sách 15', N'Tiểu thuyết', N'Lịch sử', 253702, '2023-09-21', '2023-12-16'),
+(16, N'Sách 16', N'Tham khảo', N'Văn', 227631, '2023-11-03', '2024-08-23'),
+(17, N'Sách 17', N'Kỹ năng', N'Kinh doanh', 201674, '2024-01-17', '2024-11-25'),
+(18, N'Sách 18', N'Tiểu thuyết', N'Văn', 265300, '2022-04-04', '2023-03-08'),
+(19, N'Sách 19', N'Kỹ năng', N'Kinh doanh', 245361, '2022-05-21', '2023-11-24'),
+(20, N'Sách 20', N'Giáo khoa', N'Kinh doanh', 207060, '2023-12-15', '2023-12-31');
 
 
 INSERT INTO staffs (tenNV, SDT) VALUES

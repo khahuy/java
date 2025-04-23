@@ -61,7 +61,7 @@ public class productDAL {
         boolean result = false;
         if(openConnection()){
             try{
-                String sql = "select * from product where maSP ="+id;
+                String sql = "select * from products where maSP ="+id;
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
                 if(rs.next())
@@ -142,7 +142,7 @@ public class productDAL {
         productDTO resproduct = new productDTO();
         if(openConnection()){
             try{
-                String sql = "select * form products where tenSP = "+tenSP;
+                String sql = "select * from products where tenSP = "+tenSP;
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
                 if(rs.next()){

@@ -1,7 +1,12 @@
 package GUI;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.Vector;
+import java.util.zip.DataFormatException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -82,9 +87,80 @@ public class productGUI {
         }
     }
 
+    public boolean checktf(){
+        boolean check = true;
+        String tenSP = tenSPtf.getText().trim();
+        String loaiSP = loaiSPtf.getText().trim();
+        String theloai = theloaitf.getText().trim();
+        try{
+            int maSP = Integer.parseInt(maSPtf.getText().trim());
+            if(maSP <= 1){
+                JOptionPane.showMessageDialog(null, "Mã sản phẩm phải lớn hơn 1!");
+                return check = false;
+            }
+        } catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "Mã sản phẩm phải là số!");
+            return check = false;
+        }
+        if(tenSP == ""){
+            JOptionPane.showMessageDialog(null, "Tên sản phẩm không được để trống!");
+            return check = false;
+        }
+        if(loaiSP == ""){
+            JOptionPane.showMessageDialog(null, "Loại sản phẩm không được để trống!");
+            return check = false;
+        }
+        if(theloai == ""){
+            JOptionPane.showMessageDialog(null, "Thể loại không được để trống");
+            return check = false;
+        }
+        try{
+            int giaca = Integer.parseInt(giacatf.getText().trim());
+            if(giaca <= 0){
+                JOptionPane.showMessageDialog(null, "Giá cả phải lớn hơn 0!");
+                return check = false;
+            }
+        } catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "Giá cả phải là số!");
+            return check = false;
+        }
+        try{
+            LocalDate ngayxuatban = LocalDate.parse(ngayxuatbantf.getText().trim());
+            if(ngayxuatban.isAfter(LocalDate.now())){
+                JOptionPane.showMessageDialog(null, "Ngày xuất bản không được vượt qua ngày hiện tại!");
+                return check = false;
+            }
+
+        } catch(DateTimeParseException e){
+            JOptionPane.showMessageDialog(null, "Ngày xuất bản không đúng định dạng yyyy-MM-dd!");
+            return check = false;
+        }
+        return check;
+    }
+    
+    public void addProductFunction(){
+        addBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+               if(checktf()){
+                productDTO newprod = new productDTO();
+                newprod.setmaSP(Integer.parseInt(maSPtf.getText().trim())); 
+                newprod.settenSP(tenSPtf.getText().trim());
+                newprod.setloaiSP(loaiSPtf.getText().trim());
+                newprod.settheloai(theloaitf.getText().trim());
+                newprod.setgiaca(Integer.parseInt(giacatf.getText().trim()));
+                newprod.setngayxuatban(LocalDate.parse(ngayxuatbantf.getText().trim()));
+                JOptionPane.showMessageDialog(null, productHanle.addProduct(newprod));
+                loadProductList();
+               }
+            }
+        });
+    }
+
     public productGUI(){
         interface_setting();
         loadProductList();
+        addProductFunction();
     }
 
     public static void main(String[] args) {
