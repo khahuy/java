@@ -10,6 +10,8 @@ public class productBLL {
     }    
 
     public String addProduct(productDTO newproduct){
+        if(productdata.hasProduct(newproduct.getmaSP()))
+            return "Mã sản phẩm đã tồn tại!";
         if(productdata.addProduct(newproduct))
             return "Sản phẩm đã được thêm thành công!";
         return "Thêm thất bại!";
@@ -22,18 +24,12 @@ public class productBLL {
     }
 
     public String updateProduct(productDTO productUp){
-        if(productdata.hasProduct(productUp.getmaSP()))
-            return "Mã sản phẩm đã tồn tại!";
         if(productdata.updateProduct(productUp))
             return "Đã cập nhật thành công sản phẩm!";
-        return "Cập nhật sanr phẩm thất bại!";
+        return "Cập nhật sản phẩm thất bại!";
     }
 
-    public String searchProduct(String tenSP){
-        productDTO result = productdata.searchProduct(tenSP); 
-        if(result != null){
-            return "Mã SP: "+ result.getmaSP() + "\t Tên SP: "+result.gettenSP()+ "\nLoại SP: "+result.getloaiSP() + "\t Thể loại: "+result.gettheloai()+"\nGiá cả: "+result.getgiaca()+ "\t Số lượng: "+result.getsoluong() +"\n Ngày xuất bản: "+result.getngayxuatban()+ "\t Ngày nhập kho: "+result.getngaynhapkho();
-        }
-        return "Không tìm thấy sản phẩm nào!";
+    public productDTO searchProduct(String tenSP){
+        return productdata.searchProduct(tenSP);
     }
 }

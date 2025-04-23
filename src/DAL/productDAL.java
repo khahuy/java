@@ -122,16 +122,15 @@ public class productDAL {
         boolean result = false;
         if(openConnection()){
             try{
-                String sql = "update products set maSP=?, tenSP=?, loaiSP=?, theloai=?, giaca=?, ngayxuatban=?  where maSP="+product.getmaSP();
+                String sql = "update products set tenSP=?, loaiSP=?, theloai=?, giaca=?, soluong=?, ngayxuatban=?, ngaynhapkho=?  where maSP="+product.getmaSP();
                 PreparedStatement prst = con.prepareStatement(sql);
-                prst.setInt(1, product.getmaSP());
-                prst.setString(2, product.gettenSP());
-                prst.setString(3, product.getloaiSP());
-                prst.setString(4, product.gettheloai());
-                prst.setInt(5, product.getgiaca());
-                prst.setInt(6, product.getsoluong());
-                prst.setString(7, product.getngayxuatban().format(formatter));
-                prst.setString(8, product.getngaynhapkho().format(formatter));
+                prst.setString(1, product.gettenSP());
+                prst.setString(2, product.getloaiSP());
+                prst.setString(3, product.gettheloai());
+                prst.setInt(4, product.getgiaca());
+                prst.setInt(5, product.getsoluong());
+                prst.setString(6, product.getngayxuatban().format(formatter));
+                prst.setString(7, product.getngaynhapkho().format(formatter));
                 if(prst.executeUpdate() >= 1)
                     result = true;
             } catch (SQLException e){
@@ -147,7 +146,7 @@ public class productDAL {
         productDTO resproduct = new productDTO();
         if(openConnection()){
             try{
-                String sql = "select * from products where tenSP = "+tenSP;
+                String sql = "select * from products where tenSP = N'"+tenSP+"'";
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
                 if(rs.next()){
