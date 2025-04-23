@@ -45,8 +45,9 @@ public class productDAL {
                     temp.setloaiSP(rs.getString(3));
                     temp.settheloai(rs.getString(4));
                     temp.setgiaca(rs.getInt(5));
-                    temp.setngayxuatban(rs.getDate(6).toLocalDate());
-                    temp.setngaynhapkho(rs.getDate(7).toLocalDate());
+                    temp.setsoluong(rs.getInt(6));
+                    temp.setngayxuatban(rs.getDate(7).toLocalDate());
+                    temp.setngaynhapkho(rs.getDate(8).toLocalDate());
                     arr.add(temp);
                 }
             } catch (SQLException e){
@@ -80,14 +81,15 @@ public class productDAL {
         boolean result = false;
         if(openConnection()){
             try{
-                String sql= "insert into products values(?,?,?,?,?,?)";
+                String sql= "insert into products values(?,?,?,?,?,?,?)";
                 PreparedStatement prst = con.prepareStatement(sql);
                 prst.setString(1, product.gettenSP());
                 prst.setString(2, product.getloaiSP());
                 prst.setString(3, product.gettheloai());
                 prst.setInt(4, product.getgiaca());
-                prst.setString(5, product.getngayxuatban().format(formatter));
-                prst.setString(6, product.getngaynhapkho().format(formatter));
+                prst.setInt(5, product.getsoluong());
+                prst.setString(6, product.getngayxuatban().format(formatter));
+                prst.setString(7, product.getngaynhapkho().format(formatter));
                 if(prst.executeUpdate() >= 1)
                     result = true;
             } catch(SQLException e){
@@ -127,8 +129,9 @@ public class productDAL {
                 prst.setString(3, product.getloaiSP());
                 prst.setString(4, product.gettheloai());
                 prst.setInt(5, product.getgiaca());
-                prst.setString(6, product.getngayxuatban().format(formatter));
-                prst.setString(7, product.getngaynhapkho().format(formatter));
+                prst.setInt(6, product.getsoluong());
+                prst.setString(7, product.getngayxuatban().format(formatter));
+                prst.setString(8, product.getngaynhapkho().format(formatter));
                 if(prst.executeUpdate() >= 1)
                     result = true;
             } catch (SQLException e){
@@ -153,8 +156,9 @@ public class productDAL {
                     resproduct.setloaiSP(rs.getString(3));
                     resproduct.settheloai(rs.getString(4));
                     resproduct.setgiaca(rs.getInt(5));
-                    resproduct.setngayxuatban(rs.getDate(6).toLocalDate());
-                    resproduct.setngaynhapkho(rs.getDate(7).toLocalDate());
+                    resproduct.setsoluong(rs.getInt(6));
+                    resproduct.setngayxuatban(rs.getDate(7).toLocalDate());
+                    resproduct.setngaynhapkho(rs.getDate(8).toLocalDate());
                     return resproduct;
                 }
             } catch (SQLException e){

@@ -7,6 +7,7 @@ public class productDTO {
     private String loaiSP;
     private String theloai;
     private int giaca;
+    private int soluong;
     private LocalDate ngayxuatban;
     private LocalDate ngaynhapkho;
 
@@ -20,6 +21,8 @@ public class productDTO {
     public void settheloai(String theloai){ this.theloai = theloai;}
     public int getgiaca(){ return giaca;}
     public void setgiaca(int giaca){ this.giaca = giaca;}
+    public int getsoluong(){ return soluong;}
+    public void setsoluong(int soluong){ this.soluong = soluong;}
     public LocalDate getngayxuatban(){ return ngayxuatban;}
     public void setngayxuatban(LocalDate ngayxuatban){ this.ngayxuatban = ngayxuatban;}
     public LocalDate getngaynhapkho(){ return ngaynhapkho;}
