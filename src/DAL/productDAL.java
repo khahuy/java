@@ -46,6 +46,7 @@ public class productDAL {
                     temp.settheloai(rs.getString(4));
                     temp.setgiaca(rs.getInt(5));
                     temp.setngayxuatban(rs.getDate(6).toLocalDate());
+                    temp.setngaynhapkho(rs.getDate(7).toLocalDate());
                     arr.add(temp);
                 }
             } catch (SQLException e){
@@ -81,12 +82,12 @@ public class productDAL {
             try{
                 String sql= "insert into products values(?,?,?,?,?,?)";
                 PreparedStatement prst = con.prepareStatement(sql);
-                prst.setInt(1, product.getmaSP());
-                prst.setString(2, product.gettenSP());
-                prst.setString(3, product.getloaiSP());
-                prst.setString(4, product.gettheloai());
-                prst.setInt(5, product.getgiaca());
-                prst.setString(6, product.getngayxuatban().format(formatter));
+                prst.setString(1, product.gettenSP());
+                prst.setString(2, product.getloaiSP());
+                prst.setString(3, product.gettheloai());
+                prst.setInt(4, product.getgiaca());
+                prst.setString(5, product.getngayxuatban().format(formatter));
+                prst.setString(6, product.getngaynhapkho().format(formatter));
                 if(prst.executeUpdate() >= 1)
                     result = true;
             } catch(SQLException e){
@@ -127,6 +128,7 @@ public class productDAL {
                 prst.setString(4, product.gettheloai());
                 prst.setInt(5, product.getgiaca());
                 prst.setString(6, product.getngayxuatban().format(formatter));
+                prst.setString(7, product.getngaynhapkho().format(formatter));
                 if(prst.executeUpdate() >= 1)
                     result = true;
             } catch (SQLException e){
@@ -152,6 +154,7 @@ public class productDAL {
                     resproduct.settheloai(rs.getString(4));
                     resproduct.setgiaca(rs.getInt(5));
                     resproduct.setngayxuatban(rs.getDate(6).toLocalDate());
+                    resproduct.setngaynhapkho(rs.getDate(7).toLocalDate());
                     return resproduct;
                 }
             } catch (SQLException e){

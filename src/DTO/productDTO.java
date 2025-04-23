@@ -8,6 +8,7 @@ public class productDTO {
     private String theloai;
     private int giaca;
     private LocalDate ngayxuatban;
+    private LocalDate ngaynhapkho;
 
     public int getmaSP(){ return maSP;}
     public void setmaSP(int maSP){ this.maSP = maSP;}
@@ -21,5 +22,6 @@ public class productDTO {
     public void setgiaca(int giaca){ this.giaca = giaca;}
     public LocalDate getngayxuatban(){ return ngayxuatban;}
     public void setngayxuatban(LocalDate ngayxuatban){ this.ngayxuatban = ngayxuatban;}
-
+    public LocalDate getngaynhapkho(){ return ngaynhapkho;}
+    public void setngaynhapkho(LocalDate ngaynhapkho){ this.ngaynhapkho = ngaynhapkho;}
 }

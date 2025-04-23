@@ -26,6 +26,8 @@ public class productGUI {
     JTextField giacatf = new JTextField();
     JLabel ngayxuatbanlb = new JLabel("Ngày xuất bản: ");
     JTextField ngayxuatbantf = new JTextField();
+    JLabel ngaynhapkholb = new JLabel("Ngày nhập kho: ");
+    JTextField ngaynhapkhotf = new JTextField();
     JTable table = new JTable();
     JScrollPane scrollPane = new JScrollPane();
     JButton addBtn = new JButton("Thêm sản phẩm");
@@ -48,12 +50,14 @@ public class productGUI {
         frame.add(theloailb); frame.add(theloaitf);
         frame.add(giacalb); frame.add(giacatf);
         frame.add(ngayxuatbanlb); frame.add(ngayxuatbantf);
+        frame.add(ngaynhapkholb); frame.add(ngaynhapkhotf);
         maSPlb.setBounds(30, 50, 150, 30); maSPtf.setBounds(180, 50, 250, 30);
         tenSPlb.setBounds(500, 50, 150, 30); tenSPtf.setBounds(630, 50, 250, 30);
         loaiSPlb.setBounds(30, 100, 150, 30); loaiSPtf.setBounds(180, 100, 250, 30);
         theloailb.setBounds(500, 100, 150, 30); theloaitf.setBounds(630, 100, 250, 30);
         giacalb.setBounds(30, 150, 150, 30); giacatf.setBounds(180, 150, 250, 30);
         ngayxuatbanlb.setBounds(500, 150, 150, 30); ngayxuatbantf.setBounds(630, 150, 250, 30);
+        ngaynhapkholb.setBounds(30, 200, 150, 30); ngaynhapkhotf.setBounds(180, 200, 250, 30);
         frame.add(addBtn); frame.add(updateBtn); frame.add(deleteBtn); frame.add(searchBtn);
         addBtn.setBounds(1000, 50, 150, 30); updateBtn.setBounds(1200, 50, 150, 30);
         deleteBtn.setBounds(1000, 100, 150, 30); searchBtn.setBounds(1200, 100, 150, 30);
@@ -74,6 +78,7 @@ public class productGUI {
         dtm.addColumn("Mã sản phẩm"); dtm.addColumn("Tên sản phẩm");
         dtm.addColumn("Loại sản phẩm"); dtm.addColumn("Thể loại");
         dtm.addColumn("Giá cả"); dtm.addColumn("Ngày xuất bản");
+        dtm.addColumn("Ngày nhập kho");
         table.setModel(dtm);
         Vector<productDTO> arr = new Vector<productDTO>();
         arr = productHanle.getAllProduct();
@@ -82,74 +87,81 @@ public class productGUI {
             int maSP = temp.getmaSP(); String tenSP = temp.gettenSP();
             String loaiSP = temp.getloaiSP(); String theloai = temp.gettheloai();
             int giaca = temp.getgiaca(); LocalDate ngayxuatban = temp.getngayxuatban();
-            Object[] row = {maSP, tenSP, loaiSP, theloai, giaca + " VND", ngayxuatban};
+            LocalDate ngaynhapkho = temp.getngaynhapkho();
+            Object[] row = {maSP, tenSP, loaiSP, theloai, giaca + " VND", ngayxuatban, ngaynhapkho};
             dtm.addRow(row);
         }
     }
 
-    public boolean checktf(){
+    public boolean checkaddtf(){
         boolean check = true;
         String tenSP = tenSPtf.getText().trim();
-        String loaiSP = loaiSPtf.getText().trim();
+        String loaiSP = loaiSPtf.getText().trim(); 
         String theloai = theloaitf.getText().trim();
-        try{
-            int maSP = Integer.parseInt(maSPtf.getText().trim());
-            if(maSP <= 1){
-                JOptionPane.showMessageDialog(null, "Mã sản phẩm phải lớn hơn 1!");
-                return check = false;
-            }
-        } catch (NumberFormatException e){
-            JOptionPane.showMessageDialog(null, "Mã sản phẩm phải là số!");
-            return check = false;
-        }
-        if(tenSP == ""){
+        int giaca;
+        LocalDate ngayxuatban;
+        LocalDate ngaynhapkho;
+        
+        if(tenSP.isEmpty()){
             JOptionPane.showMessageDialog(null, "Tên sản phẩm không được để trống!");
             return check = false;
         }
-        if(loaiSP == ""){
+        if(loaiSP.isEmpty()){
             JOptionPane.showMessageDialog(null, "Loại sản phẩm không được để trống!");
             return check = false;
         }
-        if(theloai == ""){
+        if(theloai.isEmpty()){
             JOptionPane.showMessageDialog(null, "Thể loại không được để trống");
             return check = false;
         }
         try{
-            int giaca = Integer.parseInt(giacatf.getText().trim());
+            giaca = Integer.parseInt(giacatf.getText().trim());
             if(giaca <= 0){
                 JOptionPane.showMessageDialog(null, "Giá cả phải lớn hơn 0!");
                 return check = false;
             }
         } catch(NumberFormatException e){
-            JOptionPane.showMessageDialog(null, "Giá cả phải là số!");
+            JOptionPane.showMessageDialog(null, "Giá cả phải là số! Không được để trống!");
             return check = false;
         }
         try{
-            LocalDate ngayxuatban = LocalDate.parse(ngayxuatbantf.getText().trim());
+            ngayxuatban = LocalDate.parse(ngayxuatbantf.getText().trim());
             if(ngayxuatban.isAfter(LocalDate.now())){
                 JOptionPane.showMessageDialog(null, "Ngày xuất bản không được vượt qua ngày hiện tại!");
                 return check = false;
             }
 
         } catch(DateTimeParseException e){
-            JOptionPane.showMessageDialog(null, "Ngày xuất bản không đúng định dạng yyyy-MM-dd!");
+            JOptionPane.showMessageDialog(null, "Ngày xuất bản không đúng định dạng yyyy-MM-dd! Không để trống!");
+            return check = false;
+        }
+        try{
+            ngaynhapkho = LocalDate.parse(ngaynhapkhotf.getText().trim());
+            if(ngaynhapkho.isAfter(LocalDate.now()) || ngaynhapkho.isBefore(ngayxuatban)){
+                JOptionPane.showMessageDialog(null, "Ngày nhập kho không được vượt qua ngày hiện tại và ngày xuất bản!");
+                return check = false;
+            }
+
+        } catch(DateTimeParseException e){
+            JOptionPane.showMessageDialog(null, "Ngày nhập kho không đúng định dạng yyyy-MM-dd! Không để trống!");
             return check = false;
         }
         return check;
     }
-    
+
     public void addProductFunction(){
         addBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-               if(checktf()){
+               if(checkaddtf()){
                 productDTO newprod = new productDTO();
-                newprod.setmaSP(Integer.parseInt(maSPtf.getText().trim())); 
                 newprod.settenSP(tenSPtf.getText().trim());
                 newprod.setloaiSP(loaiSPtf.getText().trim());
                 newprod.settheloai(theloaitf.getText().trim());
                 newprod.setgiaca(Integer.parseInt(giacatf.getText().trim()));
                 newprod.setngayxuatban(LocalDate.parse(ngayxuatbantf.getText().trim()));
+                newprod.setngaynhapkho(LocalDate.parse(ngaynhapkhotf.getText().trim()));
+                JOptionPane.showMessageDialog(null, "Mã sản phẩm sẽ được tự động cập nhật thay vì giá trị đang có!");
                 JOptionPane.showMessageDialog(null, productHanle.addProduct(newprod));
                 loadProductList();
                }
