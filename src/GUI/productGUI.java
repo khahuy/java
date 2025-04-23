@@ -237,19 +237,23 @@ public class productGUI {
             @Override
             public void actionPerformed(ActionEvent e){
                 String prodname = tenSPtf.getText().trim();
-                productDTO rsprod = productHanle.searchProduct(prodname);
-                if(rsprod != null){
-                    maSPtf.setText(String.valueOf(rsprod.getmaSP()));
-                    tenSPtf.setText(rsprod.gettenSP());
-                    loaiSPtf.setText(rsprod.getloaiSP());
-                    theloaitf.setText(rsprod.gettheloai());
-                    giacatf.setText(String.valueOf(rsprod.getgiaca()));
-                    soluongtf.setText(String.valueOf(rsprod.getsoluong()));
-                    ngayxuatbantf.setText(rsprod.getngayxuatban().toString());
-                    ngaynhapkhotf.setText(rsprod.getngaynhapkho().toString());
-                    JOptionPane.showMessageDialog(null, "Đã tìm thấy sản phẩm!");
-                } else{
-                    JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm!");
+                if(!prodname.equals("")){
+                    productDTO rsprod = productHanle.searchProduct(prodname);
+                    if(rsprod != null){
+                        maSPtf.setText(String.valueOf(rsprod.getmaSP()));
+                        tenSPtf.setText(rsprod.gettenSP());
+                        loaiSPtf.setText(rsprod.getloaiSP());
+                        theloaitf.setText(rsprod.gettheloai());
+                        giacatf.setText(String.valueOf(rsprod.getgiaca()));
+                        soluongtf.setText(String.valueOf(rsprod.getsoluong()));
+                        ngayxuatbantf.setText(rsprod.getngayxuatban().toString());
+                        ngaynhapkhotf.setText(rsprod.getngaynhapkho().toString());
+                        JOptionPane.showMessageDialog(null, "Đã tìm thấy sản phẩm!");
+                    } else{
+                        JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm!");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Hãy nhập tên sản phẩm để tìm kiếm! Vui lòng nhập chuẩn xác tên sản phẩm để thực hiện tìm kiếm!");
                 }
             }
         });
