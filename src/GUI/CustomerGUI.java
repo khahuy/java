@@ -12,38 +12,197 @@ import java.awt.event.*;
 import java.util.List;
 
 public class CustomerGUI {
-    DefaultTableModel model;
-    JTable table;
-    JTextField T_name, T_phone, searchField;
-    JFrame f;
+    private JFrame f;
+    private JTable table;
+    private DefaultTableModel model;
+    private JTextField T_name, T_phone, searchField;
+    private JButton addButton, updateButton, deleteButton, searchButton, clearInputButton, clearSearchButton;
     private String oldPhone = null;
+    JComboBox<String> month, year;
 
-    private void showMessage(String message, int type) {
-        JOptionPane.showMessageDialog(f, message, "Thông báo", type);
+    public CustomerGUI() {
+        initUI();
+        initListeners();
+        initData();
     }
 
-    private void resetForm() {
-        T_name.setText("");
-        T_phone.setText("");
+    /* ---------- 1. Giao diện ---------- */
+    private void initUI() {
+        f = new JFrame("Quản lí khách hàng");
+        f.setLayout(new BorderLayout());
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        f.setResizable(false);
+
+        // padding left - right cho thằng frame :V
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
+
+        // Panel nhập liệu
+        JPanel TopPanel = new JPanel(new GridLayout(1, 2));
+        TopPanel.setPreferredSize(new Dimension(0, 120));
+
+        Font fontI = new Font("Arial", Font.ITALIC, 24);
+        Font fontP = new Font("Arial", Font.PLAIN, 24);
+
+        JPanel leftFormPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        // Tên
+        JLabel nameLabel = new JLabel("Tên khách hàng:");
+        nameLabel.setFont(fontI);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0.4;
+        leftFormPanel.add(nameLabel, gbc);
+        // TextField Tên
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 0.6;
+        T_name = new JTextField(20);
+        T_name.setFont(fontP);
+        leftFormPanel.add(T_name, gbc);
+        // số điện thoại
+        JLabel phoneLabel = new JLabel("Số điện thoại:");
+        phoneLabel.setFont(fontI);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 0.4;
+        leftFormPanel.add(phoneLabel, gbc);
+        // TextField Số điện thoại
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.weightx = 0.6;
+        T_phone = new JTextField(20);
+        T_phone.setFont(fontP);
+        leftFormPanel.add(T_phone, gbc);
+
+        // đặt size cho textfield
+        T_name.setPreferredSize(new Dimension(300, 30));
+        T_phone.setPreferredSize(new Dimension(300, 30));
+
+        JPanel rightPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints g = new GridBagConstraints();
+        g.insets = new Insets(5, 5, 5, 5);
+        // nút làm sạch ô inputinput
+        clearInputButton = new JButton("Tải lại dữ liệu <3");
+        g.gridx = 0;
+        g.gridy = 0;
+        g.gridwidth = 2;
+        g.fill = GridBagConstraints.HORIZONTAL;
+        rightPanel.add(clearInputButton, g);
+        // JCombobox
+        month = new JComboBox<>(new String[] {
+                "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+                "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
+        });
+        year = new JComboBox<>(new String[] { "2025", "2024", "2023", "2022", "2021" });
+
+        g.gridx = 0;
+        g.gridy = 1;
+        g.gridwidth = 1;
+        rightPanel.add(month, g);
+
+        g.gridx = 1;
+        g.gridy = 1;
+        g.gridwidth = 1;
+        rightPanel.add(year, g);
+
+        month.setPreferredSize(new Dimension(200, 30));
+        year.setPreferredSize(new Dimension(300, 30));
+
+        TopPanel.add(leftFormPanel);
+        TopPanel.add(rightPanel);
+        mainPanel.add(TopPanel, BorderLayout.NORTH);
+
+        // Bảng hiển thị danh sách khách hàng
+        String[] columnNames = { "ID", "Tên khách hàng", "Số điện thoại" };
+        model = new DefaultTableModel(columnNames, 0);
+        table = new JTable(model);
+        JScrollPane tableScrollPane = new JScrollPane(table);
+        table.setFillsViewportHeight(true);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        table.setRowHeight(30);
+        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+        table.setFont(new Font("Arial", Font.PLAIN, 14));
+        table.setDefaultEditor(Object.class, null); // Không user chỉnh sửa trực tiếp trên bảng
+        table.setDefaultRenderer(Object.class, (table, value, isSelected, hasFocus, row, column) -> {
+            JLabel label = new JLabel(value != null ? value.toString() : "");
+            label.setFont(new Font("Arial", Font.PLAIN, 18));
+            label.setBorder(new EmptyBorder(0, 5, 0, 0));
+            label.setOpaque(true);
+            label.setBackground(isSelected ? Color.RED : table.getBackground());
+            label.setForeground(isSelected ? Color.WHITE : table.getForeground());
+            return label;
+        });
+        mainPanel.add(tableScrollPane, BorderLayout.CENTER);
+
+        // Panel chứa các nút và trường tìm kiếm
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+        addButton = new JButton("Thêm khách hàng");
+        updateButton = new JButton("Cập nhật thông tin");
+        deleteButton = new JButton("Xóa khách hàng");
+        searchButton = new JButton("Tìm kiếm");
+        clearSearchButton = new JButton("Hủy bỏ");
+        searchField = new JTextField(30);
+        searchField.setPreferredSize(new Dimension(300, 25));
+
+        buttonPanel.add(addButton);
+        buttonPanel.add(updateButton);
+        buttonPanel.add(deleteButton);
+        buttonPanel.add(searchButton);
+        buttonPanel.add(searchField);
+        buttonPanel.add(clearSearchButton);
+
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        f.add(mainPanel, BorderLayout.CENTER);
+        f.setVisible(true);
     }
 
-    // private void validateCustomerInput(String ten, String sdt) throws
-    // ValidationException {
-    // if (ten == null || ten.trim().isEmpty()) {
-    // throw new ValidationException("Tên khách hàng không được để trống!");
-    // }
-    // if (ten.length() > 150) {
-    // throw new ValidationException("Tên khách hàng quá dài (tối đa 150 ký tự).");
-    // }
+    /* ---------- 2. Xử Lý Sự Kiện <3 ---------- */
+    private void initListeners() {
+        addButton.addActionListener(e -> addCustomer());
+        updateButton.addActionListener(e -> updateCustomer());
+        deleteButton.addActionListener(e -> deleteCustomer());
+        searchButton.addActionListener(e -> searchCustomer());
+        clearInputButton.addActionListener(e -> {
+            resetForm();
+            loadCustomersToTable();
+        });
+        clearSearchButton.addActionListener(e -> {
+            searchField.setText("");
+            loadCustomersToTable();
+        });
 
-    // if (sdt == null || sdt.trim().isEmpty()) {
-    // throw new ValidationException("Số điện thoại không được để trống!");
-    // }
-    // if (!sdt.matches("\\d{10}")) {
-    // throw new ValidationException("Số điện thoại không hợp lệ (phải đủ 10 chữ số
-    // và chỉ chứa số).");
-    // }
-    // }
+        month.addItemListener(e -> updateCustomerTable());
+        year.addItemListener(e -> updateCustomerTable());
+
+        table.getSelectionModel().addListSelectionListener(event -> {
+            if (!event.getValueIsAdjusting() && table.getSelectedRow() != -1) {
+                int row = table.getSelectedRow();
+                T_name.setText(model.getValueAt(row, 1).toString());
+                T_phone.setText(model.getValueAt(row, 2).toString());
+                oldPhone = model.getValueAt(row, 2).toString();
+            }
+        });
+
+        f.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (table.getSelectedRow() != -1 &&
+                        !table.getBounds().contains(SwingUtilities.convertPoint(f, e.getPoint(), table))) {
+                    table.clearSelection();
+                    resetForm();
+                }
+            }
+        });
+    }
+
+    /* ---------- 3. Dữ liệu và chức năng ---------- */
+    private void initData() {
+        loadCustomersToTable();
+    }
 
     private void loadCustomersToTable() {
         model.setRowCount(0);
@@ -57,220 +216,134 @@ public class CustomerGUI {
         }
     }
 
-    public CustomerGUI() {
-        f = new JFrame("Quản lí khách hàng");
-        f.setLayout(null);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        f.setSize(800, 600);
+    private void resetForm() {
+        T_name.setText("");
+        T_phone.setText("");
+    }
 
-        JLabel name = new JLabel("Tên khách hàng: ");
-        JLabel phone = new JLabel("Số điện thoại: ");
-        T_name = new JTextField(50);
-        T_phone = new JTextField(50);
-        name.setBounds(20, 20, 150, 30);
-        T_name.setBounds(170, 20, 300, 30);
-        phone.setBounds(20, 60, 150, 30);
-        T_phone.setBounds(170, 60, 300, 30);
-        f.add(name);
-        f.add(T_name);
-        f.add(phone);
-        f.add(T_phone);
-
-        JButton addButton = new JButton("Thêm khách hàng");
-        JButton updateButton = new JButton("Cập nhật thông tin");
-        JButton deleteButton = new JButton("Xóa khách hàng");
-        JButton search = new JButton("Tìm kiếm");
-        JButton clearInput = new JButton("Xóa nội dung");
-        JButton clearSearch = new JButton("Hủy bỏ");
-        searchField = new JTextField(20);
-
-        JPanel bar = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        bar.add(clearInput);
-        bar.add(addButton);
-        bar.add(updateButton);
-        bar.add(deleteButton);
-        bar.add(search);
-        bar.add(searchField);
-        bar.add(clearSearch);
-        searchField.setPreferredSize(new Dimension(200, 27));
-        bar.setBounds(20, 150, 1200, 40);
-        bar.setBorder(BorderFactory.createEmptyBorder(0, -4, 0, 0));
-        f.add(bar);
-
-        String[] columnNames = { "ID", "Tên khách hàng", "Số điện thoại" };
-        model = new DefaultTableModel(columnNames, 0);
-        table = new JTable(model);
-        loadCustomersToTable();
-
-        JScrollPane tableScrollPane = new JScrollPane(table);
-        table.setRowHeight(30);
-        tableScrollPane.setBounds(20, 200, f.getWidth() - 50, f.getHeight() - 250);
-        f.add(tableScrollPane);
-
-        f.addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent e) {
-                tableScrollPane.setBounds(20, 200, f.getWidth() - 50, f.getHeight() - 250);
-                bar.setBounds(20, 150, f.getWidth() - 50, 40);
-            }
-        });
-
-        // đỡ được 1 chút :v nếu thao tác lỗi thì vẫn hiện chữ đen bên dướidưới
-        SwingUtilities.invokeLater(() -> {
-            addButton.repaint();
-            updateButton.repaint();
-            deleteButton.repaint();
-            search.repaint();
-        });
-
-        // tắt cái mặc định của nónó
-        table.setDefaultEditor(Object.class, null);
-
-        // tự vẽ nên cái bản theo ý muốn
-        table.setDefaultRenderer(Object.class, (table, value, isSelected, hasFocus, row, column) -> {
-            JLabel label = new JLabel(value != null ? value.toString() : "");
-            label.setFont(new Font("Arial", Font.PLAIN, 18));
-            label.setBorder(new EmptyBorder(0, 5, 0, 0));
-            label.setOpaque(true);
-            label.setBackground(isSelected ? Color.RED : table.getBackground());
-            label.setForeground(isSelected ? Color.WHITE : table.getForeground());
-            return label;
-        });
-
-        // click vào 1 dòng sẽ hiện lên trên khung chat
-        table.getSelectionModel().addListSelectionListener(event -> {
-            if (!event.getValueIsAdjusting() && table.getSelectedRow() != -1) {
-                int row = table.getSelectedRow();
-                T_name.setText(model.getValueAt(row, 1).toString());
-                T_phone.setText(model.getValueAt(row, 2).toString());
-                oldPhone = model.getValueAt(row, 2).toString();
-            }
-        });
-
-        addButton.addActionListener(e -> {
-            String ten = T_name.getText().trim();
-            String sdt = T_phone.getText().trim();
-            CustomerBLL bll = new CustomerBLL();
-            try {
-                bll.validateCustomerInput(ten, sdt);
-                customerDTO customer = new customerDTO();
-                customer.settenKH(ten);
-                customer.setSDT(sdt);
-                Result result = bll.addCustomer(customer);
-                showMessage(result.getMessage(), JOptionPane.INFORMATION_MESSAGE);
-                if (result.isSuccess()) {
-                    loadCustomersToTable();
-                    resetForm();
-                }
-            } catch (ValidationException ex) {
-                showMessage(ex.getMessage(), JOptionPane.WARNING_MESSAGE);
-            }
-        });
-
-        updateButton.addActionListener(e -> {
-            int selectedRow = table.getSelectedRow();
-            if (selectedRow == -1) {
-                showMessage("Vui lòng chọn một khách hàng để cập nhật.", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            String ten = T_name.getText().trim();
-            String sdt = T_phone.getText().trim();
-            int id = (int) model.getValueAt(selectedRow, 0);
-
+    private void addCustomer() {
+        String ten = T_name.getText().trim();
+        String sdt = T_phone.getText().trim();
+        CustomerBLL bll = new CustomerBLL();
+        try {
+            bll.validateCustomerInput(ten, sdt);
             customerDTO customer = new customerDTO();
-            customer.setmaKH(id);
             customer.settenKH(ten);
             customer.setSDT(sdt);
-
-            CustomerBLL bll = new CustomerBLL();
-            if (!sdt.equals(oldPhone)) {
-                if (bll.isPhoneExist(sdt)) {
-                    showMessage("Số điện thoại đã tồn tại ở khách hàng khác.", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-            }
-
-            Result result = bll.updateCustomer(customer);
+            Result result = bll.addCustomer(customer);
             showMessage(result.getMessage(), JOptionPane.INFORMATION_MESSAGE);
             if (result.isSuccess()) {
                 loadCustomersToTable();
                 resetForm();
-                oldPhone = null;
             }
-        });
+        } catch (ValidationException ex) {
+            showMessage(ex.getMessage(), JOptionPane.WARNING_MESSAGE);
+        }
+    }
 
-        deleteButton.addActionListener(e -> {
-            int selectedRow = table.getSelectedRow();
-            if (selectedRow == -1) {
-                showMessage("Vui lòng chọn khách hàng để xóa.", JOptionPane.WARNING_MESSAGE);
+    private void updateCustomer() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow == -1) {
+            showMessage("Vui lòng chọn một khách hàng để cập nhật.", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String ten = T_name.getText().trim();
+        String sdt = T_phone.getText().trim();
+        int id = (int) model.getValueAt(selectedRow, 0);
+
+        customerDTO customer = new customerDTO();
+        customer.setmaKH(id);
+        customer.settenKH(ten);
+        customer.setSDT(sdt);
+
+        CustomerBLL bll = new CustomerBLL();
+        if (!sdt.equals(oldPhone)) {
+            if (bll.isPhoneExist(sdt)) {
+                showMessage("Số điện thoại đã tồn tại ở khách hàng khác.", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            int confirm = JOptionPane.showConfirmDialog(f, "Bạn có chắc chắn muốn xóa khách hàng này?", "Xác nhận",
-                    JOptionPane.YES_NO_OPTION);
-            if (confirm != JOptionPane.YES_OPTION)
-                return;
-            int id = (int) model.getValueAt(selectedRow, 0);
-            boolean success = new CustomerBLL().deleteCustomer(id);
-            showMessage(success ? "Xóa thành công!" : "Xóa thất bại!", JOptionPane.INFORMATION_MESSAGE);
-            if (success) {
-                loadCustomersToTable();
-                resetForm();
-            }
-        });
+        }
 
-        search.addActionListener(e -> {
-            String keyword = searchField.getText().trim();
-            if (keyword.isEmpty()) {
-                loadCustomersToTable();
-                return;
-            }
-            List<customerDTO> results = new CustomerBLL().searchCustomersByName(keyword);
-            model.setRowCount(0);
-            for (customerDTO customer : results) {
-                model.addRow(new Object[] {
-                        customer.getmaKH(),
-                        customer.gettenKH(),
-                        customer.getSDT()
-                });
-            }
-            if (model.getRowCount() == 0) {
-                showMessage("Không tìm thấy khách hàng nào với tên: " + keyword, JOptionPane.INFORMATION_MESSAGE);
-                searchField.setText("");
-                loadCustomersToTable();
-            } else {
-                showMessage("Tìm thấy " + model.getRowCount() + " khách hàng.", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
+        Result result = bll.updateCustomer(customer);
+        showMessage(result.getMessage(), JOptionPane.INFORMATION_MESSAGE);
+        if (result.isSuccess()) {
+            loadCustomersToTable();
+            resetForm();
+            oldPhone = null;
+        }
+    }
 
-        clearInput.addActionListener(e -> resetForm());
-        clearSearch.addActionListener(e -> {
+    private void deleteCustomer() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow == -1) {
+            showMessage("Vui lòng chọn khách hàng để xóa.", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int confirm = JOptionPane.showConfirmDialog(f, "Bạn có chắc chắn muốn xóa khách hàng này?", "Xác nhận",
+                JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION)
+            return;
+        int id = (int) model.getValueAt(selectedRow, 0);
+        boolean success = new CustomerBLL().deleteCustomer(id);
+        showMessage(success ? "Xóa thành công!" : "Xóa thất bại!", JOptionPane.INFORMATION_MESSAGE);
+        if (success) {
+            loadCustomersToTable();
+            resetForm();
+        }
+    }
+
+    private void searchCustomer() {
+        String keyword = searchField.getText().trim();
+        if (keyword.isEmpty()) {
+            loadCustomersToTable();
+            return;
+        }
+        List<customerDTO> results = new CustomerBLL().searchCustomersByName(keyword);
+        model.setRowCount(0);
+        for (customerDTO customer : results) {
+            model.addRow(new Object[] {
+                    customer.getmaKH(),
+                    customer.gettenKH(),
+                    customer.getSDT()
+            });
+        }
+        if (model.getRowCount() == 0) {
+            showMessage("Không tìm thấy khách hàng nào với " + keyword, JOptionPane.INFORMATION_MESSAGE);
             searchField.setText("");
             loadCustomersToTable();
-        });
-
-        // click ngoài table thì sẽ bỏ chọn dòng đang chọn
-        f.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                if (table.getSelectedRow() != -1 &&
-                        !table.getBounds().contains(SwingUtilities.convertPoint(f, e.getPoint(), table))) {
-                    table.clearSelection();
-                    resetForm();
-                }
-            }
-        });
-
-        f.setVisible(true);
+        } else {
+            showMessage("Tìm thấy " + model.getRowCount() + " khách hàng.", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
+    private void updateCustomerTable() {
+        int selectedMonth = month.getSelectedIndex() + 1;
+        int selectedYear = Integer.parseInt((String) year.getSelectedItem());
+
+        CustomerBLL customerBLL = new CustomerBLL();
+        List<customerDTO> customers = customerBLL.getCustomersByMonthAndYear(selectedMonth, selectedYear);
+
+        model.setRowCount(0);
+
+        for (customerDTO customer : customers) {
+            model.addRow(new Object[] {
+                    customer.getmaKH(),
+                    customer.gettenKH(),
+                    customer.getSDT()
+            });
+        }
+    }
+
+    private void showMessage(String message, int type) {
+        JOptionPane.showMessageDialog(f, message, "Thông báo", type);
+    }
+
+    /* ---------- 4. Main ---------- */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new CustomerGUI());
+        new CustomerGUI();
     }
 }
-/*
- * 1. pick cus có sẵn xong cập nhật là nó không check điều kiện nữa. => check
- * điều kiện cho update
- * 2. xóa cus nhưng nó để lại viền :v (done)
- * 3. Vẫn còn chữ đen bên dưới các nút :v
- * 4. Cố dùng Layout
- * 5. ơ tự nhiên xóa cus ko được nữa. check lại xem. (done)
- */
+// cài đặt chiều rộng chiều caocao
+// tableScrollPane.setPreferredSize(new Dimension(500, 300));
+// đặt giới hạnhạn
+// tableScrollPane.setMinimumSize(new Dimension(0, 300));

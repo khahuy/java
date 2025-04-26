@@ -15,9 +15,11 @@ CREATE TABLE products (
 );
 CREATE TABLE customers (
     maKH INT IDENTITY(1,1) PRIMARY KEY,
-    tenKH NVARCHAR(150),
-    SDT NVARCHAR(150)
+    tenKH NVARCHAR(50),
+    SDT NVARCHAR(10) UNIQUE,  
+    ngayDangKy DATETIME DEFAULT GETDATE()
 );
+select * from customers where 1 = 1
 CREATE TABLE staffs (
     maNV INT IDENTITY(1,1) PRIMARY KEY,
     tenNV NVARCHAR(150),
@@ -69,23 +71,25 @@ INSERT INTO staffs (tenNV, SDT) VALUES
 (N'Nhân viên 4', '0916857983'),
 (N'Nhân viên 5', '0916984349');
 
-INSERT INTO customers (tenKH, SDT) VALUES
-(N'Khách hàng 1', '0916808250'),
-(N'Khách hàng 2', '0981441179'),
-(N'Khách hàng 3', '0957472281'),
-(N'Khách hàng 4', '0935051479'),
-(N'Khách hàng 5', '0989014867'),
-(N'Khách hàng 6', '0912116844'),
-(N'Khách hàng 7', '0915869570'),
-(N'Khách hàng 8', '0915531883'),
-(N'Khách hàng 9', '0947692586'),
-(N'Khách hàng 10', '0981517485'),
-(N'Khách hàng 11', '0987872539'),
-(N'Khách hàng 12', '0922709184'),
-(N'Khách hàng 13', '0916788806'),
-(N'Khách hàng 14', '0998419066'),
-(N'Khách hàng 15', '0913311073');
-
+INSERT INTO customers (tenKH, SDT, ngayDangKy) VALUES
+(N'Khách hàng 1', '0916808250', '2021-01-01'),
+(N'Khách hàng 2', '0981441179', '2021-01-01'),
+(N'Khách hàng 3', '0957472281', '2021-01-01'),
+(N'Khách hàng 4', '0935051479', '2021-01-01'),
+(N'Khách hàng 5', '0989014867', '2021-01-01'),
+(N'Khách hàng 6', '0912116844', '2021-01-01'),
+(N'Khách hàng 7', '0915869570', '2021-01-01'),
+(N'Khách hàng 8', '0915531883', '2021-01-01'),
+(N'Khách hàng 9', '0947692586', '2021-01-01'),
+(N'Khách hàng 10', '0981517485', '2021-01-01'),
+(N'Khách hàng 11', '0987872539', '2021-01-01'),
+(N'Khách hàng 12', '0922709184', '2021-01-01'),
+(N'Khách hàng 13', '0916788806', '2021-01-01'),
+(N'Khách hàng 14', '0998419066', '2021-01-01'),
+(N'Khách hàng 15', '0913311073', '2021-01-01');
+-- UPDATE customers
+-- SET ngayDangKy = '2021-01-01 00:00:00'
+-- WHERE ngayDangKy != '2021-01-01 00:00:00';
 
 -- Chèn hóa đơn
 INSERT INTO bills (maKH, tongtien, ngaymua) VALUES (9, 203557*5, '2024-02-10');    
