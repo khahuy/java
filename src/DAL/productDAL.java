@@ -142,14 +142,15 @@ public class productDAL {
         return result;
     }
 
-    public productDTO searchProduct(String tenSP){
-        productDTO resproduct = new productDTO();
+    public Vector<productDTO> searchProduct(String tenSP){
+        Vector<productDTO> arr = new Vector<productDTO>();
         if(openConnection()){
             try{
-                String sql = "select * from products where tenSP = N'"+tenSP+"'";
+                String sql = "select * from products where tenSP like N'%"+tenSP+"%'";
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
-                if(rs.next()){
+                while(rs.next()){
+                    productDTO resproduct = new productDTO();
                     resproduct.setmaSP(rs.getInt(1));
                     resproduct.settenSP(rs.getString(2));
                     resproduct.setloaiSP(rs.getString(3));
@@ -158,8 +159,9 @@ public class productDAL {
                     resproduct.setsoluong(rs.getInt(6));
                     resproduct.setngayxuatban(rs.getDate(7).toLocalDate());
                     resproduct.setngaynhapkho(rs.getDate(8).toLocalDate());
-                    return resproduct;
+                    arr.add(resproduct);
                 }
+                return arr;
             } catch (SQLException e){
                 System.out.println(e);
             } finally {

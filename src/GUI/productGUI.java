@@ -38,6 +38,7 @@ public class productGUI {
     JButton updateBtn = new JButton("Cập nhật sản phẩm");
     JButton deleteBtn = new JButton("Xóa sản phẩm");
     JButton searchBtn = new JButton("Tìm kiếm sản phẩm");
+    JButton refreshBtn = new JButton("Tải lại");
 
     productBLL productHanle = new productBLL();
 
@@ -64,10 +65,10 @@ public class productGUI {
         soluonglb.setBounds(500, 150, 150, 30); soluongtf.setBounds(630, 150, 250, 30);
         ngayxuatbanlb.setBounds(30, 200, 150, 30); ngayxuatbantf.setBounds(180, 200, 250, 30);
         ngaynhapkholb.setBounds(500, 200, 150, 30); ngaynhapkhotf.setBounds(630, 200, 250, 30);
-        frame.add(addBtn); frame.add(updateBtn); frame.add(deleteBtn); frame.add(searchBtn);
+        frame.add(addBtn); frame.add(updateBtn); frame.add(deleteBtn); frame.add(searchBtn); frame.add(refreshBtn);
         addBtn.setBounds(1000, 50, 150, 30); updateBtn.setBounds(1200, 50, 150, 30);
         deleteBtn.setBounds(1000, 100, 150, 30); searchBtn.setBounds(1200, 100, 150, 30);
-
+        refreshBtn.setBounds(1420, 200, 70, 30);
         table.setFillsViewportHeight(true);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         table.setRowHeight(26);
@@ -79,15 +80,13 @@ public class productGUI {
         frame.add(scrollPane);
     }
 
-    public void loadProductList(){
+    public void loadProductList(Vector<productDTO> arr){
         DefaultTableModel dtm = new DefaultTableModel();
         dtm.addColumn("Mã sản phẩm"); dtm.addColumn("Tên sản phẩm");
         dtm.addColumn("Loại sản phẩm"); dtm.addColumn("Thể loại");
         dtm.addColumn("Giá cả"); dtm.addColumn("Số lượng");
         dtm.addColumn("Ngày xuất bản"); dtm.addColumn("Ngày nhập kho");
         table.setModel(dtm);
-        Vector<productDTO> arr = new Vector<productDTO>();
-        arr = productHanle.getAllProduct();
         for(int i=0; i<arr.size(); i++){
             productDTO temp = arr.get(i);
             int maSP = temp.getmaSP(); String tenSP = temp.gettenSP();
@@ -197,7 +196,7 @@ public class productGUI {
                 newprod.setngaynhapkho(LocalDate.parse(ngaynhapkhotf.getText().trim()));
                 JOptionPane.showMessageDialog(null, "Mã sản phẩm sẽ được tự động thêm vào thay vì giá trị đang có!");
                 JOptionPane.showMessageDialog(null, productHanle.addProduct(newprod));
-                loadProductList();
+                loadProductList(productHanle.getAllProduct());
                }
             }
         });
@@ -208,7 +207,7 @@ public class productGUI {
             @Override
             public void actionPerformed(ActionEvent e){
                 JOptionPane.showMessageDialog(null, productHanle.delProduct(Integer.parseInt(maSPtf.getText().trim())));
-                loadProductList();
+                loadProductList(productHanle.getAllProduct());
             }
         });
     }
@@ -227,7 +226,7 @@ public class productGUI {
                 newprod.setngayxuatban(LocalDate.parse(ngayxuatbantf.getText().trim()));
                 newprod.setngaynhapkho(LocalDate.parse(ngaynhapkhotf.getText().trim()));
                 JOptionPane.showMessageDialog(null, productHanle.updateProduct(newprod));
-                loadProductList();
+                loadProductList(productHanle.getAllProduct());
             }
         });
     }
@@ -238,35 +237,36 @@ public class productGUI {
             public void actionPerformed(ActionEvent e){
                 String prodname = tenSPtf.getText().trim();
                 if(!prodname.equals("")){
-                    productDTO rsprod = productHanle.searchProduct(prodname);
-                    if(rsprod != null){
-                        maSPtf.setText(String.valueOf(rsprod.getmaSP()));
-                        tenSPtf.setText(rsprod.gettenSP());
-                        loaiSPtf.setText(rsprod.getloaiSP());
-                        theloaitf.setText(rsprod.gettheloai());
-                        giacatf.setText(String.valueOf(rsprod.getgiaca()));
-                        soluongtf.setText(String.valueOf(rsprod.getsoluong()));
-                        ngayxuatbantf.setText(rsprod.getngayxuatban().toString());
-                        ngaynhapkhotf.setText(rsprod.getngaynhapkho().toString());
-                        JOptionPane.showMessageDialog(null, "Đã tìm thấy sản phẩm!");
+                    Vector<productDTO> products = productHanle.searchProduct(prodname);
+                    if(products != null){
+                        loadProductList(products);
                     } else{
-                        JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm!");
+                        JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm nào phù hợp!");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Hãy nhập tên sản phẩm để tìm kiếm! Vui lòng nhập chuẩn xác tên sản phẩm để thực hiện tìm kiếm!");
+                    JOptionPane.showMessageDialog(null, "Hãy nhập tên sản phẩm để tìm kiếm!");
                 }
             }
         });
     }
 
+    public void refreshTable(){
+        refreshBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                loadProductList(productHanle.getAllProduct());
+            }
+        });;
+    }
 
     public productGUI(){
         interface_setting();
-        loadProductList();
+        loadProductList(productHanle.getAllProduct());
         addProductFunction();
         delProductFunction();
         updateProductFunction();
         searchProductFunction();
+        refreshTable();
     }
 
     public static void main(String[] args) {

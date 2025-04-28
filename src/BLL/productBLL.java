@@ -29,7 +29,7 @@ public class productBLL {
         return "Cập nhật sản phẩm thất bại!";
     }
 
-    public productDTO searchProduct(String tenSP){
+    public Vector<productDTO> searchProduct(String tenSP){
         return productdata.searchProduct(tenSP);
     }
 }
