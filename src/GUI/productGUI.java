@@ -250,6 +250,10 @@ public class productGUI {
         });
     }
 
+    public void filterProductFunctuin(){
+        
+    }
+
     public void refreshTable(){
         refreshBtn.addActionListener(new ActionListener() {
             @Override
@@ -258,6 +262,7 @@ public class productGUI {
             }
         });;
     }
+
 
     public productGUI(){
         interface_setting();
