@@ -39,8 +39,11 @@ public class productGUI {
     JButton deleteBtn = new JButton("Xóa sản phẩm");
     JButton searchBtn = new JButton("Tìm kiếm sản phẩm");
     JButton refreshBtn = new JButton("Tải lại");
+    String filterstr[] = {"Thể loại", "Loại sản phẩm"};
+    JLabel filterlb =  new JLabel("Sắp xếp");
+    JComboBox filtercb = new JComboBox(filterstr);
 
-    productBLL productHanle = new productBLL();
+    productBLL productHandle = new productBLL();
 
     public void interface_setting(){
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -57,6 +60,7 @@ public class productGUI {
         frame.add(soluonglb); frame.add(soluongtf);
         frame.add(ngayxuatbanlb); frame.add(ngayxuatbantf);
         frame.add(ngaynhapkholb); frame.add(ngaynhapkhotf);
+        frame.add(filterlb);
         maSPlb.setBounds(30, 50, 150, 30); maSPtf.setBounds(180, 50, 250, 30);
         tenSPlb.setBounds(500, 50, 150, 30); tenSPtf.setBounds(630, 50, 250, 30);
         loaiSPlb.setBounds(30, 100, 150, 30); loaiSPtf.setBounds(180, 100, 250, 30);
@@ -65,10 +69,11 @@ public class productGUI {
         soluonglb.setBounds(500, 150, 150, 30); soluongtf.setBounds(630, 150, 250, 30);
         ngayxuatbanlb.setBounds(30, 200, 150, 30); ngayxuatbantf.setBounds(180, 200, 250, 30);
         ngaynhapkholb.setBounds(500, 200, 150, 30); ngaynhapkhotf.setBounds(630, 200, 250, 30);
-        frame.add(addBtn); frame.add(updateBtn); frame.add(deleteBtn); frame.add(searchBtn); frame.add(refreshBtn);
+        frame.add(addBtn); frame.add(updateBtn); frame.add(deleteBtn); frame.add(searchBtn); frame.add(refreshBtn); frame.add(filtercb);
         addBtn.setBounds(1000, 50, 150, 30); updateBtn.setBounds(1200, 50, 150, 30);
         deleteBtn.setBounds(1000, 100, 150, 30); searchBtn.setBounds(1200, 100, 150, 30);
-        refreshBtn.setBounds(1420, 200, 70, 30);
+        refreshBtn.setBounds(1420, 200, 70, 30); 
+        filterlb.setBounds(1050, 150, 100, 30); filtercb.setBounds(1150, 150, 100, 30);
         table.setFillsViewportHeight(true);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         table.setRowHeight(26);
@@ -195,8 +200,8 @@ public class productGUI {
                 newprod.setngayxuatban(LocalDate.parse(ngayxuatbantf.getText().trim()));
                 newprod.setngaynhapkho(LocalDate.parse(ngaynhapkhotf.getText().trim()));
                 JOptionPane.showMessageDialog(null, "Mã sản phẩm sẽ được tự động thêm vào thay vì giá trị đang có!");
-                JOptionPane.showMessageDialog(null, productHanle.addProduct(newprod));
-                loadProductList(productHanle.getAllProduct());
+                JOptionPane.showMessageDialog(null, productHandle.addProduct(newprod));
+                loadProductList(productHandle.getAllProduct());
                }
             }
         });
@@ -206,8 +211,8 @@ public class productGUI {
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                JOptionPane.showMessageDialog(null, productHanle.delProduct(Integer.parseInt(maSPtf.getText().trim())));
-                loadProductList(productHanle.getAllProduct());
+                JOptionPane.showMessageDialog(null, productHandle.delProduct(Integer.parseInt(maSPtf.getText().trim())));
+                loadProductList(productHandle.getAllProduct());
             }
         });
     }
@@ -225,8 +230,8 @@ public class productGUI {
                 newprod.setsoluong(Integer.parseInt(soluongtf.getText().trim()));
                 newprod.setngayxuatban(LocalDate.parse(ngayxuatbantf.getText().trim()));
                 newprod.setngaynhapkho(LocalDate.parse(ngaynhapkhotf.getText().trim()));
-                JOptionPane.showMessageDialog(null, productHanle.updateProduct(newprod));
-                loadProductList(productHanle.getAllProduct());
+                JOptionPane.showMessageDialog(null, productHandle.updateProduct(newprod));
+                loadProductList(productHandle.getAllProduct());
             }
         });
     }
@@ -237,7 +242,7 @@ public class productGUI {
             public void actionPerformed(ActionEvent e){
                 String prodname = tenSPtf.getText().trim();
                 if(!prodname.equals("")){
-                    Vector<productDTO> products = productHanle.searchProduct(prodname);
+                    Vector<productDTO> products = productHandle.searchProduct(prodname);
                     if(products != null){
                         loadProductList(products);
                     } else{
@@ -250,15 +255,46 @@ public class productGUI {
         });
     }
 
-    public void filterProductFunctuin(){
-        
+    public void filterProductFunction(){
+        filtercb.addActionListener(new ActionListener() {
+            @Override 
+            public void actionPerformed(ActionEvent e){
+                Vector<productDTO> result = new Vector<productDTO>(); 
+                if(filtercb.getSelectedItem().equals("Thể loại")){
+                    String tempstr = theloaitf.getText();
+                    if(tempstr.equals("")){
+                        JOptionPane.showMessageDialog(null, "Vui lòng nhập thể loại để sắp xếp");
+                    } else {
+                        Vector<productDTO> temparr = productHandle.getAllProduct();
+                        for(int i=0; i<temparr.size(); i++){
+                            if(temparr.get(i).gettheloai().equals(tempstr))
+                                result.add(temparr.get(i));
+                        }
+                        loadProductList(result);
+                    }
+                }
+                else if(filtercb.getSelectedItem().equals("Loại sản phẩm")){
+                    String tempstr = loaiSPtf.getText();
+                    if(tempstr.equals("")){
+                        JOptionPane.showMessageDialog(null, "Vui lòng nhập loại sản phẩm để sắp xếp");
+                    } else{
+                        Vector<productDTO> temparr = productHandle.getAllProduct();
+                        for(int i=0; i<temparr.size(); i++){
+                            if(temparr.get(i).getloaiSP().equals(tempstr))
+                                result.add(temparr.get(i));
+                        }
+                        loadProductList(result);
+                    }
+                }
+            }
+        });
     }
 
     public void refreshTable(){
         refreshBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                loadProductList(productHanle.getAllProduct());
+                loadProductList(productHandle.getAllProduct());
             }
         });;
     }
@@ -266,11 +302,12 @@ public class productGUI {
 
     public productGUI(){
         interface_setting();
-        loadProductList(productHanle.getAllProduct());
+        loadProductList(productHandle.getAllProduct());
         addProductFunction();
         delProductFunction();
         updateProductFunction();
         searchProductFunction();
+        filterProductFunction();
         refreshTable();
     }
 
