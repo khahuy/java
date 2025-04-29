@@ -40,7 +40,7 @@ public class productGUI {
     JButton searchBtn = new JButton("Tìm kiếm sản phẩm");
     JButton refreshBtn = new JButton("Tải lại");
     String filterstr[] = {"Thể loại", "Loại sản phẩm"};
-    JLabel filterlb =  new JLabel("Sắp xếp");
+    JLabel filterlb =  new JLabel("Sắp xếp:");
     JComboBox filtercb = new JComboBox(filterstr);
 
     productBLL productHandle = new productBLL();
