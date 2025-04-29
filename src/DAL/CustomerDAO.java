@@ -13,9 +13,9 @@ public class CustomerDAO {
 		try {
 			if (conn == null || conn.isClosed()) {
 				Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-				String dbUrl = "jdbc:sqlserver://HaoHuynh:1433;DatabaseName=javaDB;encrypt=false;trustServerCertificate=true";
-				String username = "sa";
-				String password = "haohuynh445";
+				String dbUrl="jdbc:sqlserver://localhost:1433;DatabaseName=javaDB;trustServerCertificate=true;";
+        String username = "huynh";
+        String password = "huynh";
 				conn = DriverManager.getConnection(dbUrl, username, password);
 			}
 		} catch (Exception e) {

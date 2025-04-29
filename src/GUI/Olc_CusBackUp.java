@@ -16,10 +16,8 @@ public class CustomerGUI {
     private JTable table;
     private DefaultTableModel model;
     private JTextField T_name, T_phone, searchField;
-    private JButton addButton, updateButton, deleteButton, searchButton, clearInputButton, clearSearchButton, lovisong;
+    private JButton addButton, updateButton, deleteButton, searchButton, clearInputButton, clearSearchButton;
     private String oldPhone = null;
-    private int soluong = 0;
-    private JLabel soluonglabel;
     JComboBox<String> month, year;
 
     public CustomerGUI() {
@@ -100,13 +98,6 @@ public class CustomerGUI {
                 "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
         });
         year = new JComboBox<>(new String[] { "2025", "2024", "2023", "2022", "2021" });
-        soluonglabel = new JLabel("Số lượng: ");
-        lovisong = new JButton("Thoát");
-
-        g.gridx = 2;
-        g.gridy = 0;
-        g.gridwidth = 1;
-        rightPanel.add(lovisong, g);
 
         g.gridx = 0;
         g.gridy = 1;
@@ -117,11 +108,6 @@ public class CustomerGUI {
         g.gridy = 1;
         g.gridwidth = 1;
         rightPanel.add(year, g);
-
-        g.gridx = 2;
-        g.gridy = 1;
-        g.gridwidth = 1;
-        rightPanel.add(soluonglabel, g);
 
         month.setPreferredSize(new Dimension(200, 30));
         year.setPreferredSize(new Dimension(300, 30));
@@ -188,10 +174,6 @@ public class CustomerGUI {
         clearSearchButton.addActionListener(e -> {
             searchField.setText("");
             loadCustomersToTable();
-        });
-        lovisong.addActionListener(e -> {
-            // f.dispose();
-            // thêm link chuyển hướng NGAY ĐÂY !!!!!!!! 
         });
 
         month.addItemListener(e -> updateCustomerTable());
@@ -350,8 +332,6 @@ public class CustomerGUI {
                     customer.getSDT()
             });
         }
-        soluong = customers.size();
-        soluonglabel.setText("Số lượng: "+ soluong);
     }
 
     private void showMessage(String message, int type) {
