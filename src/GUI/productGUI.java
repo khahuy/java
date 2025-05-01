@@ -45,6 +45,7 @@ public class productGUI {
     JComboBox mstatiticcb = new JComboBox(months);
     JComboBox ystatiticcb = new JComboBox(years); 
     JButton ok = new JButton("OK");
+    JButton exit = new JButton("Thoát");
 
     productBLL productHandle = new productBLL();
 
@@ -64,7 +65,8 @@ public class productGUI {
         frame.add(ngayxuatbanlb); frame.add(ngayxuatbantf);
         frame.add(ngaynhapkholb); frame.add(ngaynhapkhotf);
         frame.add(filterlb); frame.add(filtercb);
-        frame.add(numstatiticlb); frame.add(mstatiticcb); frame.add(ystatiticcb); frame.add(ok);
+        frame.add(numstatiticlb); frame.add(mstatiticcb); frame.add(ystatiticcb); frame.add(ok); frame.add(exit);
+        exit.setBounds(10, 10, 75, 30);
         maSPlb.setBounds(30, 50, 150, 30); maSPtf.setBounds(180, 50, 250, 30);
         tenSPlb.setBounds(500, 50, 150, 30); tenSPtf.setBounds(630, 50, 250, 30);
         loaiSPlb.setBounds(30, 100, 150, 30); loaiSPtf.setBounds(180, 100, 250, 30);
@@ -322,6 +324,18 @@ public class productGUI {
         });
     }
 
+    public void exit(){
+        exit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                int ques = JOptionPane.showConfirmDialog(null, "Bạn chắc chắn muốn thoát chức năng quản lý sản phẩm?",  "Question", JOptionPane.YES_NO_OPTION);
+                if(ques == JOptionPane.YES_OPTION){
+                    frame.dispose();
+                }
+            }
+        });
+    }
+
     public productGUI(){
         interface_setting();
         loadProductList(productHandle.getAllProduct());
@@ -332,6 +346,7 @@ public class productGUI {
         filterProductFunction();
         statiticFunction();
         refreshTable();
+        exit();
     }
 
     public static void main(String[] args) {
