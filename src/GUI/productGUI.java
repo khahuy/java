@@ -70,7 +70,7 @@ public class productGUI {
         addBtn.setBounds(1000, 50, 150, 30); updateBtn.setBounds(1200, 50, 150, 30);
         deleteBtn.setBounds(1000, 100, 150, 30); searchBtn.setBounds(1200, 100, 150, 30);
         refreshBtn.setBounds(1420, 200, 70, 30); 
-        filterlb.setBounds(1050, 150, 100, 30); filtercb.setBounds(1150, 150, 100, 30);
+        filterlb.setBounds(1000, 150, 100, 30); filtercb.setBounds(1100, 150, 100, 30);
         table.setFillsViewportHeight(true);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         table.setRowHeight(26);
