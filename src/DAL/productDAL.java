@@ -59,11 +59,11 @@ public class productDAL {
         return arr;
     } 
 
-    public boolean hasProduct(int id){
+    public boolean hasProduct(String tenSP){
         boolean result = false;
         if(openConnection()){
             try{
-                String sql = "select * from products where maSP ="+id;
+                String sql = "select * from products where tenSP COLLATE Latin1_General_CI_AI like N'%" + tenSP + "%'";
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
                 if(rs.next())
@@ -143,9 +143,9 @@ public class productDAL {
     }
 
     public Vector<productDTO> searchProduct(String tenSP){
-        Vector<productDTO> arr = new Vector<productDTO>();
         if(openConnection()){
             try{
+                Vector<productDTO> arr = new Vector<productDTO>();
                 String sql = "select * from products where tenSP like N'%"+tenSP+"%'";
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
@@ -162,6 +162,35 @@ public class productDAL {
                     arr.add(resproduct);
                 }
                 return arr;
+            } catch (SQLException e){
+                System.out.println(e);
+            } finally {
+                closeConnection();
+            }
+        }
+        return null;
+    }
+
+    public Vector<productDTO> statiticProduct(String month, String year){
+        if(openConnection()){
+            try{
+                Vector<productDTO> result = new Vector<productDTO>();
+                String sql = "select * from products where month(ngaynhapkho) = "+month+ " and year(ngaynhapkho) = "+year;
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
+                while(rs.next()){
+                    productDTO temp = new productDTO();
+                    temp.setmaSP(rs.getInt(1));
+                    temp.settenSP(rs.getString(2));
+                    temp.setloaiSP(rs.getString(3));
+                    temp.settheloai(rs.getString(4));
+                    temp.setgiaca(rs.getInt(5));
+                    temp.setsoluong(rs.getInt(6));
+                    temp.setngayxuatban(rs.getDate(7).toLocalDate());
+                    temp.setngaynhapkho(rs.getDate(8).toLocalDate());
+                    result.add(temp);
+                }
+                return result;
             } catch (SQLException e){
                 System.out.println(e);
             } finally {

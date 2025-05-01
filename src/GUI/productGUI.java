@@ -39,6 +39,12 @@ public class productGUI {
     String filterstr[] = {"Thể loại", "Loại sản phẩm"};
     JLabel filterlb =  new JLabel("Sắp xếp:");
     JComboBox filtercb = new JComboBox(filterstr);
+    JLabel numstatiticlb = new JLabel("Thống kê hàng nhập trong tháng: ");
+    String months[] = {"1","2","3","4","5","6","7","8","9","10","11","12"};
+    String years[] = {"2022", "2023", "2024", "2025"};
+    JComboBox mstatiticcb = new JComboBox(months);
+    JComboBox ystatiticcb = new JComboBox(years); 
+    JButton ok = new JButton("OK");
 
     productBLL productHandle = new productBLL();
 
@@ -57,7 +63,8 @@ public class productGUI {
         frame.add(soluonglb); frame.add(soluongtf);
         frame.add(ngayxuatbanlb); frame.add(ngayxuatbantf);
         frame.add(ngaynhapkholb); frame.add(ngaynhapkhotf);
-        frame.add(filterlb);
+        frame.add(filterlb); frame.add(filtercb);
+        frame.add(numstatiticlb); frame.add(mstatiticcb); frame.add(ystatiticcb); frame.add(ok);
         maSPlb.setBounds(30, 50, 150, 30); maSPtf.setBounds(180, 50, 250, 30);
         tenSPlb.setBounds(500, 50, 150, 30); tenSPtf.setBounds(630, 50, 250, 30);
         loaiSPlb.setBounds(30, 100, 150, 30); loaiSPtf.setBounds(180, 100, 250, 30);
@@ -66,11 +73,14 @@ public class productGUI {
         soluonglb.setBounds(500, 150, 150, 30); soluongtf.setBounds(630, 150, 250, 30);
         ngayxuatbanlb.setBounds(30, 200, 150, 30); ngayxuatbantf.setBounds(180, 200, 250, 30);
         ngaynhapkholb.setBounds(500, 200, 150, 30); ngaynhapkhotf.setBounds(630, 200, 250, 30);
-        frame.add(addBtn); frame.add(updateBtn); frame.add(deleteBtn); frame.add(searchBtn); frame.add(refreshBtn); frame.add(filtercb);
+        frame.add(addBtn); frame.add(updateBtn); frame.add(deleteBtn); frame.add(searchBtn); frame.add(refreshBtn); 
         addBtn.setBounds(1000, 50, 150, 30); updateBtn.setBounds(1200, 50, 150, 30);
         deleteBtn.setBounds(1000, 100, 150, 30); searchBtn.setBounds(1200, 100, 150, 30);
-        refreshBtn.setBounds(1420, 200, 70, 30); 
-        filterlb.setBounds(1000, 150, 100, 30); filtercb.setBounds(1100, 150, 100, 30);
+        refreshBtn.setBounds(1450, 200, 70, 30); 
+        filterlb.setBounds(1000, 150, 70, 30); filtercb.setBounds(1080, 150, 100, 30);
+        numstatiticlb.setBounds(1000, 200, 200, 30); 
+        mstatiticcb.setBounds(1210, 200, 40, 30); ystatiticcb.setBounds(1260, 200, 65, 30);
+        ok.setBounds(1340, 200, 55, 30);
         table.setFillsViewportHeight(true);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         table.setRowHeight(26);
@@ -100,6 +110,7 @@ public class productGUI {
         }
 
         table.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e){
                 int i =table.getSelectedRow();
                 if(i >= 0){
@@ -188,7 +199,6 @@ public class productGUI {
             public void actionPerformed(ActionEvent e){
                if(checkAddtf()){
                 productDTO newprod = new productDTO();
-                newprod.setmaSP(Integer.parseInt(maSPtf.getText().trim()));
                 newprod.settenSP(tenSPtf.getText().trim());
                 newprod.setloaiSP(loaiSPtf.getText().trim());
                 newprod.settheloai(theloaitf.getText().trim());
@@ -196,7 +206,7 @@ public class productGUI {
                 newprod.setsoluong(Integer.parseInt(soluongtf.getText().trim()));
                 newprod.setngayxuatban(LocalDate.parse(ngayxuatbantf.getText().trim()));
                 newprod.setngaynhapkho(LocalDate.parse(ngaynhapkhotf.getText().trim()));
-                JOptionPane.showMessageDialog(null, "Mã sản phẩm sẽ được tự động thêm vào thay vì giá trị đang có!");
+                JOptionPane.showMessageDialog(null, "Mã sản phẩm sẽ được tự động thêm vào!");
                 JOptionPane.showMessageDialog(null, productHandle.addProduct(newprod));
                 loadProductList(productHandle.getAllProduct());
                }
@@ -240,7 +250,7 @@ public class productGUI {
                 String prodname = tenSPtf.getText().trim();
                 if(!prodname.equals("")){
                     Vector<productDTO> products = productHandle.searchProduct(prodname);
-                    if(products != null){
+                    if(!products.isEmpty()){
                         loadProductList(products);
                     } else{
                         JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm nào phù hợp!");
@@ -296,6 +306,22 @@ public class productGUI {
         });;
     }
 
+    public void statiticFunction(){
+        ok.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                String month = mstatiticcb.getSelectedItem().toString();
+                String year = ystatiticcb.getSelectedItem().toString();
+                Vector<productDTO> arr = productHandle.statiticProduct(month, year);
+                if(!arr.isEmpty()){
+                    loadProductList(arr);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Không có sản phẩm nào được nhập kho vào tháng " +month+" năm "+year);
+                }
+            }
+        });
+    }
+
     public productGUI(){
         interface_setting();
         loadProductList(productHandle.getAllProduct());
@@ -304,6 +330,7 @@ public class productGUI {
         updateProductFunction();
         searchProductFunction();
         filterProductFunction();
+        statiticFunction();
         refreshTable();
     }
 

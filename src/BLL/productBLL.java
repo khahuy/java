@@ -10,8 +10,8 @@ public class productBLL {
     }    
 
     public String addProduct(productDTO newproduct){
-        if(productdata.hasProduct(newproduct.getmaSP()))
-            return "Mã sản phẩm đã tồn tại!";
+        if(productdata.hasProduct(newproduct.gettenSP()))
+            return "Sản phẩm đã tồn tại!";
         if(productdata.addProduct(newproduct))
             return "Sản phẩm đã được thêm thành công!";
         return "Thêm thất bại!";
@@ -31,5 +31,9 @@ public class productBLL {
 
     public Vector<productDTO> searchProduct(String tenSP){
         return productdata.searchProduct(tenSP);
+    }
+
+    public Vector<productDTO> statiticProduct(String month, String year){
+        return productdata.statiticProduct(month, year);
     }
 }
