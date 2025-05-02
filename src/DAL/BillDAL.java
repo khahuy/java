@@ -14,9 +14,9 @@ public class BillDAL {
 
     public boolean openConnection() {
         try {
-            String dbUrl = "jdbc:sqlserver://localhost:1433;DatabaseName=javaDB;trustServerCertificate=true;";
-            String username = "sa";
-            String password = "123456";
+            String dbUrl="jdbc:sqlserver://localhost:1433;DatabaseName=javaDB;trustServerCertificate=true;";
+            String username = "huynh";
+            String password = "huynh";
             conn = DriverManager.getConnection(dbUrl, username, password);
             return true;
         } catch (Exception e) {

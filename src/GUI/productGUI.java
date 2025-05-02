@@ -129,7 +129,7 @@ public class productGUI {
         });
     }
 
-    public boolean checkAddtf(){
+    public boolean checktf(){
         boolean check = true;
         String tenSP = tenSPtf.getText().trim();
         String loaiSP = loaiSPtf.getText().trim(); 
@@ -199,7 +199,7 @@ public class productGUI {
         addBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-               if(checkAddtf()){
+               if(checktf()){
                 productDTO newprod = new productDTO();
                 newprod.settenSP(tenSPtf.getText().trim());
                 newprod.setloaiSP(loaiSPtf.getText().trim());
@@ -230,17 +230,20 @@ public class productGUI {
         updateBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                productDTO newprod = new productDTO();
-                newprod.setmaSP(Integer.parseInt(maSPtf.getText().trim()));
-                newprod.settenSP(tenSPtf.getText().trim());
-                newprod.setloaiSP(loaiSPtf.getText().trim());
-                newprod.settheloai(theloaitf.getText().trim());
-                newprod.setgiaca(Integer.parseInt(giacatf.getText().trim()));
-                newprod.setsoluong(Integer.parseInt(soluongtf.getText().trim()));
-                newprod.setngayxuatban(LocalDate.parse(ngayxuatbantf.getText().trim()));
-                newprod.setngaynhapkho(LocalDate.parse(ngaynhapkhotf.getText().trim()));
-                JOptionPane.showMessageDialog(null, productHandle.updateProduct(newprod));
-                loadProductList(productHandle.getAllProduct());
+                if(checktf()){productDTO newprod = new productDTO();
+                    newprod.setmaSP(Integer.parseInt(maSPtf.getText().trim()));
+                    newprod.settenSP(tenSPtf.getText().trim());
+                    newprod.setloaiSP(loaiSPtf.getText().trim());
+                    newprod.settheloai(theloaitf.getText().trim());
+                    newprod.setgiaca(Integer.parseInt(giacatf.getText().trim()));
+                    newprod.setsoluong(Integer.parseInt(soluongtf.getText().trim()));
+                    newprod.setngayxuatban(LocalDate.parse(ngayxuatbantf.getText().trim()));
+                    newprod.setngaynhapkho(LocalDate.parse(ngaynhapkhotf.getText().trim()));
+                    JOptionPane.showMessageDialog(null, productHandle.updateProduct(newprod));
+                    loadProductList(productHandle.getAllProduct());
+                } else{
+                    JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin sản phẩm!");
+                }
             }
         });
     }
