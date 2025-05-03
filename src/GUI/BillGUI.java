@@ -37,6 +37,7 @@ public class BillGUI extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setTitle("Quản lí hóa đơn");
 
 		// setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -44,14 +45,21 @@ public class BillGUI extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		JButton btnThoat = new JButton("Thoát");
+		btnThoat.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnThoat.setBounds(62, 17, 134, 35);
+		contentPane.add(btnThoat);
 
 		JLabel lbMaHoaDon = new JLabel("Mã Hóa Đơn");
 		lbMaHoaDon.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		lbMaHoaDon.setBounds(62, 26, 164, 50);
+		// lbMaHoaDon.setBounds(62, 26, 164, 50);
+		lbMaHoaDon.setBounds(62, 65, 164, 50);
+
 		contentPane.add(lbMaHoaDon);
 
 		textField_newMaHD = new JTextField();
-		textField_newMaHD.setBounds(176, 37, 265, 37);
+		textField_newMaHD.setBounds(176, 75, 265, 30);
 		contentPane.add(textField_newMaHD);
 		textField_newMaHD.setColumns(10);
 		textField_newMaHD.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -59,11 +67,11 @@ public class BillGUI extends JFrame {
 		JLabel lblTnSnPhm = new JLabel("Tên Sản Phẩm");
 		lblTnSnPhm.setFont(new Font("Tahoma", Font.PLAIN, 19));
 
-		lblTnSnPhm.setBounds(483, 26, 164, 50);
+		lblTnSnPhm.setBounds(483, 65, 164, 50);
 		contentPane.add(lblTnSnPhm);
 
 		comboBox = new JComboBox();
-		comboBox.setBounds(621, 37, 298, 37);
+		comboBox.setBounds(621, 75, 298, 30);
 		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		contentPane.add(comboBox);
 
@@ -74,19 +82,19 @@ public class BillGUI extends JFrame {
 
 		textField_soLuong = new JTextField();
 		textField_soLuong.setColumns(10);
-		textField_soLuong.setBounds(1056, 37, 241, 37);
+		textField_soLuong.setBounds(1056, 75, 241, 30);
 		contentPane.add(textField_soLuong);
 		textField_soLuong.setFont(new Font("Tahoma", Font.PLAIN, 15));
 
 		JLabel lblSLng = new JLabel("Số Lượng");
 		lblSLng.setFont(new Font("Tahoma", Font.PLAIN, 19));
 
-		lblSLng.setBounds(968, 26, 164, 50);
+		lblSLng.setBounds(968, 65, 164, 50);
 		contentPane.add(lblSLng);
 
 		JButton btnNewButton = new JButton("Thêm");
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnNewButton.setBounds(1356, 30, 134, 50);
+		btnNewButton.setBounds(1356, 72, 134, 35);
 		contentPane.add(btnNewButton);
 
 		btnNewButton.addActionListener(new ActionListener() {
@@ -128,13 +136,13 @@ public class BillGUI extends JFrame {
 
 		textField_search = new JTextField();
 		textField_search.setColumns(10);
-		textField_search.setBounds(62, 131, 265, 37);
+		textField_search.setBounds(62, 150, 265, 30);
 		contentPane.add(textField_search);
 		textField_search.setFont(new Font("Tahoma", Font.PLAIN, 15));
 
 		JButton btnSearch = new JButton("Tìm Kiếm");
 		btnSearch.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnSearch.setBounds(337, 131, 134, 39);
+		btnSearch.setBounds(337, 147, 134, 35);
 		contentPane.add(btnSearch);
 
 		btnSearch.addActionListener(new ActionListener() {
@@ -164,7 +172,7 @@ public class BillGUI extends JFrame {
 
 		JButton btnThongKe = new JButton("Thống Kê\r\n");
 		btnThongKe.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnThongKe.setBounds(1333, 125, 157, 50);
+		btnThongKe.setBounds(1333, 147, 157, 35);
 		contentPane.add(btnThongKe);
 
 		btnThongKe.addActionListener(new ActionListener() {
@@ -236,7 +244,7 @@ public class BillGUI extends JFrame {
 
 		JButton btnDeleteBill = new JButton("Xóa Hóa Đơn");
 		btnDeleteBill.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnDeleteBill.setBounds(1119, 125, 206, 50);
+		btnDeleteBill.setBounds(1119, 147, 206, 35);
 		contentPane.add(btnDeleteBill);
 
 		btnDeleteBill.addActionListener(new ActionListener() {
@@ -273,7 +281,7 @@ public class BillGUI extends JFrame {
 
 		JButton btnUpdateBill = new JButton("Cập Nhật Hóa Đơn");
 		btnUpdateBill.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnUpdateBill.setBounds(890, 125, 220, 50);
+		btnUpdateBill.setBounds(890, 147, 220, 35);
 		contentPane.add(btnUpdateBill);
 
 		btnUpdateBill.addActionListener(new ActionListener() {
@@ -331,7 +339,7 @@ public class BillGUI extends JFrame {
 
 		JButton btnNewHD = new JButton("Tạo Hóa Đơn");
 		btnNewHD.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnNewHD.setBounds(690, 125, 190, 50);
+		btnNewHD.setBounds(690, 147, 190, 35);
 		contentPane.add(btnNewHD);
 
 		btnNewHD.addActionListener(new ActionListener() {
