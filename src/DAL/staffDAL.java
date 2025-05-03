@@ -57,8 +57,8 @@ public class staffDAL {
             try{
                 String sql = "insert into staffs values(?, ?)";
                 PreparedStatement pstmt = con.prepareStatement(sql);
-                pstmt.setString(2, staff.gettenNV());
-                pstmt.setString(4, staff.getSDT());
+                pstmt.setString(1, staff.gettenNV());
+                pstmt.setString(2, staff.getSDT());
                 if(pstmt.executeUpdate() > 0){
                     result = true;
                 }

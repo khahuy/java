@@ -5,7 +5,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 
 public class staffGUI {
@@ -81,13 +82,70 @@ public class staffGUI {
         });
     }
 
+    public Boolean checktf(){
+        boolean check = true;
+        if(tenNVtf.getText().equals("") || SDTtf.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
+            return check = false;
+        }
+        if(!SDTtf.getText().matches("[0-9]+")){
+            JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ!");
+            return check = false;
+        }
+        if(SDTtf.getText().length() != 10){
+            JOptionPane.showMessageDialog(null, "Số điện thoại phải có 10 chữ số!");
+            return check = false;
+        }  
+        return check;
+    }
+
     public void addStaff(){
-        
+        addBtn.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(checktf()){
+                    staffDTO newstaff = new staffDTO();
+                    newstaff.settenNV(tenNVtf.getText());
+                    newstaff.setSDT(SDTtf.getText());
+                    JOptionPane.showMessageDialog(null, "Mã nhân viên sẽ được tự động cập nhật!");
+                    JOptionPane.showMessageDialog(null, staffhandle.addStaff(newstaff));
+                    loadStaffTable(staffhandle.getAllStaff());
+                }
+            }
+        });
+    }
+    
+    public void refreshTable(){
+        refreshBtn.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                loadStaffTable(staffhandle.getAllStaff());
+                maNVtf.setText(""); tenNVtf.setText(""); SDTtf.setText("");
+            }
+        });
+    }
+
+    public void exit(){
+        exit.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                int result = JOptionPane.showConfirmDialog(null, "Bạn có muốn thoát không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+                if(result == JOptionPane.YES_OPTION){
+                    frame.dispose();
+                }
+            }
+        });
     }
 
     public staffGUI(){
         setStaffInterface();
         loadStaffTable(staffhandle.getAllStaff());
+        addStaff();
+        //updateStaff();
+        //deleteStaff();
+        //searchStaff();
+        refreshTable();
+        exit();
     }
 
     public static void main(String[] args){

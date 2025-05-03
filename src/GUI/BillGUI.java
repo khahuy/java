@@ -35,7 +35,7 @@ public class BillGUI extends JFrame {
 
 	public BillGUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		// setBounds(100, 100, 450, 300);

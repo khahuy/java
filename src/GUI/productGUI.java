@@ -230,19 +230,24 @@ public class productGUI {
         updateBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                if(checktf()){productDTO newprod = new productDTO();
-                    newprod.setmaSP(Integer.parseInt(maSPtf.getText().trim()));
-                    newprod.settenSP(tenSPtf.getText().trim());
-                    newprod.setloaiSP(loaiSPtf.getText().trim());
-                    newprod.settheloai(theloaitf.getText().trim());
-                    newprod.setgiaca(Integer.parseInt(giacatf.getText().trim()));
-                    newprod.setsoluong(Integer.parseInt(soluongtf.getText().trim()));
-                    newprod.setngayxuatban(LocalDate.parse(ngayxuatbantf.getText().trim()));
-                    newprod.setngaynhapkho(LocalDate.parse(ngaynhapkhotf.getText().trim()));
-                    JOptionPane.showMessageDialog(null, productHandle.updateProduct(newprod));
-                    loadProductList(productHandle.getAllProduct());
-                } else{
-                    JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin sản phẩm!");
+                if(maSPtf.getText().trim().isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Nhập mã sản phẩm để cập nhật!");
+                } else {
+                    if(checktf()){
+                        productDTO newprod = new productDTO();
+                        newprod.setmaSP(Integer.parseInt(maSPtf.getText().trim()));
+                        newprod.settenSP(tenSPtf.getText().trim());
+                        newprod.setloaiSP(loaiSPtf.getText().trim());
+                        newprod.settheloai(theloaitf.getText().trim());
+                        newprod.setgiaca(Integer.parseInt(giacatf.getText().trim()));
+                        newprod.setsoluong(Integer.parseInt(soluongtf.getText().trim()));
+                        newprod.setngayxuatban(LocalDate.parse(ngayxuatbantf.getText().trim()));
+                        newprod.setngaynhapkho(LocalDate.parse(ngaynhapkhotf.getText().trim()));
+                        JOptionPane.showMessageDialog(null, productHandle.updateProduct(newprod));
+                        loadProductList(productHandle.getAllProduct());
+                    } else{
+                        JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin sản phẩm!");
+                    }
                 }
             }
         });
@@ -307,6 +312,9 @@ public class productGUI {
             @Override
             public void actionPerformed(ActionEvent e){
                 loadProductList(productHandle.getAllProduct());
+                maSPtf.setText(""); tenSPtf.setText(""); loaiSPtf.setText("");
+                theloaitf.setText(""); giacatf.setText(""); soluongtf.setText("");
+                ngayxuatbantf.setText(""); ngaynhapkhotf.setText("");
             }
         });;
     }
@@ -320,6 +328,12 @@ public class productGUI {
                 Vector<productDTO> arr = productHandle.statiticProduct(month, year);
                 if(!arr.isEmpty()){
                     loadProductList(arr);
+                    int count = 0;
+                    for(int i=0; i<arr.size(); i++){
+                        count += arr.get(i).getsoluong();
+                    }
+                    String total = "Tổng số sản phẩm được nhập kho trong tháng " + month + " năm " + year + " là: " + count;
+                    JOptionPane.showMessageDialog(null, total);
                 } else {
                     JOptionPane.showMessageDialog(null, "Không có sản phẩm nào được nhập kho vào tháng " +month+" năm "+year);
                 }
