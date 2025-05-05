@@ -115,6 +115,55 @@ public class staffGUI {
         });
     }
     
+    public void updateStaff(){
+        updateBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                try{
+                    int maNV = Integer.parseInt(maNVtf.getText());
+                    if(checktf()){
+                        staffDTO newstaff = new staffDTO();
+                        newstaff.setmaNV(maNV);
+                        newstaff.settenNV(tenNVtf.getText());
+                        newstaff.setSDT(SDTtf.getText());
+                        JOptionPane.showMessageDialog(null, staffhandle.updateStaff(newstaff));
+                        loadStaffTable(staffhandle.getAllStaff());
+                    }
+                } catch (NumberFormatException ex){
+                    JOptionPane.showMessageDialog(null, "Vui lòng nhập mã của nhân viên cần cập nhật!");
+                }
+            }
+        });
+    }
+
+    public void deleteStaff(){
+        deleteBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                JOptionPane.showMessageDialog(null, staffhandle.deleteStaff(Integer.parseInt(maNVtf.getText())));
+                loadStaffTable(staffhandle.getAllStaff());
+            }
+        });
+    }
+
+    public void searchStaff(){
+        searchBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                Vector<staffDTO> arr = staffhandle.searchStaff(tenNVtf.getText());
+                if(tenNVtf.getText().equals("")){
+                    JOptionPane.showMessageDialog(null,"Vui lòng nhập tên nhân viên để tìm kiếm!");
+                } else {
+                    if(arr.isEmpty()){
+                        JOptionPane.showMessageDialog(null, "Không tìm thấy nhân viên nào phù hợp!");
+                    } else {
+                        loadStaffTable(arr);
+                    }
+                }
+            }
+        });
+    }
+
     public void refreshTable(){
         refreshBtn.addActionListener(new ActionListener(){
             @Override
@@ -129,9 +178,10 @@ public class staffGUI {
         exit.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                int result = JOptionPane.showConfirmDialog(null, "Bạn có muốn thoát không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+                int result = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn thoát không?", "Question", JOptionPane.YES_NO_OPTION);
                 if(result == JOptionPane.YES_OPTION){
                     frame.dispose();
+                    new BookStore();
                 }
             }
         });
@@ -141,9 +191,9 @@ public class staffGUI {
         setStaffInterface();
         loadStaffTable(staffhandle.getAllStaff());
         addStaff();
-        //updateStaff();
-        //deleteStaff();
-        //searchStaff();
+        updateStaff();
+        deleteStaff();
+        searchStaff();
         refreshTable();
         exit();
     }

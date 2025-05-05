@@ -136,8 +136,8 @@ public class staffDAL {
                 String sql = "select * from staffs where tenNV like N'%"+tenNV+"%'";
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
-                staffDTO staff = new staffDTO();
                 while(rs.next()){
+                    staffDTO staff = new staffDTO();
                     staff.setmaNV(rs.getInt(1));
                     staff.settenNV(rs.getString(2));
                     staff.setSDT(rs.getString(3));

@@ -190,8 +190,11 @@ public class CustomerGUI {
             loadCustomersToTable();
         });
         lovisong.addActionListener(e -> {
-            // f.dispose();
-            // thêm link chuyển hướng NGAY ĐÂY !!!!!!!! 
+            int confirm = JOptionPane.showConfirmDialog(f, "Bạn có chắc chắn muốn thoát không?", "Question", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                f.dispose();
+                new BookStore(); 
+            }
         });
 
         month.addItemListener(e -> updateCustomerTable());

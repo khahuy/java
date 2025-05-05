@@ -38,7 +38,7 @@ public class BillGUI extends JFrame {
 		
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setTitle("Quản lí hóa đơn");
-
+		setVisible(true);
 		// setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -50,6 +50,17 @@ public class BillGUI extends JFrame {
 		btnThoat.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnThoat.setBounds(62, 17, 134, 35);
 		contentPane.add(btnThoat);
+
+		btnThoat.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int result = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn thoát không?", "Question", JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.YES_OPTION) {
+					dispose(); 
+					new BookStore();
+				}
+			}
+		});
 
 		JLabel lbMaHoaDon = new JLabel("Mã Hóa Đơn");
 		lbMaHoaDon.setFont(new Font("Tahoma", Font.PLAIN, 19));
@@ -469,7 +480,6 @@ public class BillGUI extends JFrame {
 				try {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					BillGUI frame = new BillGUI();
-					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

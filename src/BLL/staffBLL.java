@@ -23,10 +23,14 @@ public class staffBLL {
     }
 
     public String updateStaff(staffDTO staff){
-        if(staffdal.updateStaff(staff)){
-            return "Cập nhật nhân viên thành công!";
+        if(staffdal.hasStaff(staff.getSDT())){
+            return "Nhân viên với số máy: "+staff.getSDT()+ " đã tồn tại!";
         } else {
-            return "Cập nhật nhân viên thất bại!";
+            if(staffdal.updateStaff(staff)){
+                return "Cập nhật nhân viên thành công!";
+            } else {
+                return "Cập nhật nhân viên thất bại!";
+            }
         }
     }
 
@@ -38,7 +42,7 @@ public class staffBLL {
         }
     }
     
-    public Vector<staffDTO> searchStaffs(String tenNV){
+    public Vector<staffDTO> searchStaff(String tenNV){
         return staffdal.searchStaff(tenNV);
     }
     

@@ -245,7 +245,7 @@ public class productGUI {
                         newprod.setngaynhapkho(LocalDate.parse(ngaynhapkhotf.getText().trim()));
                         JOptionPane.showMessageDialog(null, productHandle.updateProduct(newprod));
                         loadProductList(productHandle.getAllProduct());
-                    } else{
+                    } else {
                         JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin sản phẩm!");
                     }
                 }
@@ -345,9 +345,10 @@ public class productGUI {
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                int ques = JOptionPane.showConfirmDialog(null, "Bạn chắc chắn muốn thoát chức năng quản lý sản phẩm?",  "Question", JOptionPane.YES_NO_OPTION);
+                int ques = JOptionPane.showConfirmDialog(null, "Bạn chắc chắn muốn thoát không?",  "Question", JOptionPane.YES_NO_OPTION);
                 if(ques == JOptionPane.YES_OPTION){
                     frame.dispose();
+                    new BookStore();
                 }
             }
         });
