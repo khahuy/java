@@ -14,7 +14,7 @@ public class BookStore {
     JButton billBtn = new JButton();
 
     public void setInterface(){
-        frame.setBounds(250, 0, 900, 750);
+        frame.setBounds(250, 20, 900, 750);
         frame.setUndecorated(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
@@ -100,7 +100,6 @@ public class BookStore {
 
     public BookStore(){
         setInterface();
-        JOptionPane.showMessageDialog(frame, "Chào mừng bạn đến với cửa hàng sách!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         manageCustomer(); manageProduct();
         manageStaff(); manageBill();
         exit();
@@ -108,5 +107,6 @@ public class BookStore {
 
     public static void main(String[] args){
         BookStore bookStore = new BookStore();
+        JOptionPane.showMessageDialog(null, "Chào mừng bạn đến với cửa hàng sách!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
     }
 }
