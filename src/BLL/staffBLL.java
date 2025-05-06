@@ -23,14 +23,10 @@ public class staffBLL {
     }
 
     public String updateStaff(staffDTO staff){
-        if(staffdal.hasStaff(staff.getSDT())){
-            return "Nhân viên với số máy: "+staff.getSDT()+ " đã tồn tại!";
+        if(staffdal.updateStaff(staff)){
+            return "Cập nhật nhân viên thành công!";
         } else {
-            if(staffdal.updateStaff(staff)){
-                return "Cập nhật nhân viên thành công!";
-            } else {
-                return "Cập nhật nhân viên thất bại!";
-            }
+            return "Cập nhật nhân viên thất bại!";
         }
     }
 
